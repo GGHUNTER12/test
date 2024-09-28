@@ -59,7 +59,7 @@ const searchBar = document.createElement('input');
 searchBar.type = 'text';
 searchBar.placeholder = 'Enter URL';
 searchBar.style.width = '150px'; // Set a fixed width for the search bar
-searchBar.style.borderRadius = '5px'; // Rounded corners
+searchBar.style.borderRadius = '15px'; // Rounded corners
 searchBar.style.border = '1px solid #ccc'; // Light border
 searchBar.style.padding = '5px'; // Padding for the input field
 searchBar.style.fontFamily = 'Google Sans, Arial, sans-serif'; // Set font for search bar
@@ -130,7 +130,7 @@ document.body.appendChild(panel);
 // Function to update the size of the drag button
 function updateButtonSize() {
   const panelWidth = panel.clientWidth;
-  dragHandle.style.width = `${panelWidth / 4 - 20}px`; // Adjust width of drag button
+  dragHandle.style.width = ${panelWidth / 4 - 20}px; // Adjust width of drag button
 }
 
 // Make the panel movable only when dragging the dragHandle
@@ -146,8 +146,8 @@ dragHandle.addEventListener('mousedown', (e) => {
 
 document.addEventListener('mousemove', (e) => {
   if (isDragging) {
-    panel.style.left = `${e.clientX - offset.x}px`;
-    panel.style.top = `${e.clientY - offset.y}px`;
+    panel.style.left = ${e.clientX - offset.x}px;
+    panel.style.top = ${e.clientY - offset.y}px;
   }
 });
 
@@ -214,7 +214,7 @@ alert("UI Frame by snoopy | Use keys 'S' + 'G' to hide or unhide the UI");
 
 // Update iframe size when the panel is resized
 new ResizeObserver(() => {
-  iframe.style.height = `calc(${panel.clientHeight}px - 100px)`; // Adjust iframe height
+  iframe.style.height = calc(${panel.clientHeight}px - 100px); // Adjust iframe height
   updateButtonSize(); // Update the drag button size
 }).observe(panel);
 
