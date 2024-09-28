@@ -13,6 +13,7 @@ panel.style.overflow = 'auto';
 panel.style.padding = '5px'; // Add some padding
 panel.style.boxSizing = 'border-box'; // Ensure padding doesn't affect width/height
 panel.style.borderRadius = '15px'; // Add rounded corners
+panel.style.fontFamily = "'Google Sans', sans-serif"; // Set font to Google Sans
 
 // Create close button
 const closeButton = document.createElement('button');
@@ -24,6 +25,7 @@ closeButton.style.border = 'none'; // Remove default border
 closeButton.style.borderRadius = '5px'; // Rounded corners for button
 closeButton.style.padding = '5px 10px'; // Smaller padding for a compact look
 closeButton.style.fontSize = '14px'; // Smaller font size
+closeButton.style.fontFamily = "'Google Sans', sans-serif"; // Set font to Google Sans
 closeButton.style.transition = 'background-color 0.3s'; // Transition effect
 closeButton.style.marginRight = '10px'; // Space between buttons
 
@@ -37,6 +39,7 @@ dragHandle.style.border = 'none'; // Remove default border
 dragHandle.style.borderRadius = '5px'; // Rounded corners for button
 dragHandle.style.padding = '5px 10px'; // Smaller padding for a compact look
 dragHandle.style.fontSize = '14px'; // Smaller font size
+dragHandle.style.fontFamily = "'Google Sans', sans-serif"; // Set font to Google Sans
 dragHandle.style.transition = 'background-color 0.3s'; // Transition effect
 dragHandle.style.marginRight = '10px'; // Space between buttons
 
@@ -50,6 +53,7 @@ reloadButton.style.border = 'none'; // Remove default border
 reloadButton.style.borderRadius = '5px'; // Rounded corners for button
 reloadButton.style.padding = '5px 10px'; // Padding for a compact look
 reloadButton.style.fontSize = '14px'; // Smaller font size
+reloadButton.style.fontFamily = "'Google Sans', sans-serif"; // Set font to Google Sans
 reloadButton.style.transition = 'background-color 0.3s'; // Transition effect
 reloadButton.style.marginRight = '10px'; // Space between buttons
 
@@ -61,6 +65,7 @@ searchBar.style.width = '150px'; // Set a fixed width for the search bar
 searchBar.style.borderRadius = '5px'; // Rounded corners
 searchBar.style.border = '1px solid #ccc'; // Light border
 searchBar.style.padding = '5px'; // Padding for the input field
+searchBar.style.fontFamily = "'Google Sans', sans-serif"; // Set font to Google Sans
 
 // Change close button color on hover
 closeButton.addEventListener('mouseover', () => {
@@ -105,6 +110,7 @@ textLabel.innerText = 'made by your fav coder (snoopy)💯💯 and with AI help'
 textLabel.style.color = 'white'; // Set text color
 textLabel.style.marginTop = '5px'; // Space between video and text
 textLabel.style.textAlign = 'center'; // Center the text
+textLabel.style.fontFamily = "'Google Sans', sans-serif"; // Set font to Google Sans
 
 // Create a container for buttons and search bar
 const controlsContainer = document.createElement('div');
@@ -217,3 +223,4 @@ new ResizeObserver(() => {
 
 // Initial size adjustment
 updateButtonSize();
+
