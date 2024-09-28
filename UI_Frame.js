@@ -167,7 +167,13 @@ reloadButton.addEventListener('click', () => {
 // Search bar functionality - change iframe source on input
 searchBar.addEventListener('keypress', (event) => {
   if (event.key === 'Enter') {
-    const url = searchBar.value;
+    let url = searchBar.value.trim(); // Get and trim the input value
+    
+    // Add "https://" if it's missing
+    if (!/^https?:\/\//i.test(url) && url.length > 0) {
+      url = 'https://' + url;
+    }
+    
     iframe.src = url; // Set the iframe's src to the value in the search bar
     searchBar.value = ''; // Clear the search bar after submission
   }
