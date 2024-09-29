@@ -1,102 +1,172 @@
 // Create a movable and resizable panel
 const panel = document.createElement('div');
 panel.style.position = 'fixed';
-panel.style.top = '0';  // Ensure it's positioned at the top initially
-panel.style.left = '0'; // Ensure it's positioned at the left initially
-panel.style.width = '400px';
-panel.style.height = '300px'; // Adjusted height for the video
+panel.style.top = '0';
+panel.style.left = '0';
+panel.style.width = '479px';
+panel.style.height = '299px';
 panel.style.backgroundColor = '#89CFF0';
 panel.style.border = '5px solid black';
-panel.style.zIndex = '2147483647'; // Highest possible zIndex value
+panel.style.zIndex = '2147483646';
 panel.style.resize = 'both';
 panel.style.overflow = 'auto';
-panel.style.padding = '5px'; // Add some padding
-panel.style.boxSizing = 'border-box'; // Ensure padding doesn't affect width/height
-panel.style.borderRadius = '15px'; // Add rounded corners
-panel.style.fontFamily = 'Google Sans, Arial, sans-serif'; // Set the font family for the panel
+panel.style.padding = '5px';
+panel.style.boxSizing = 'border-box';
+panel.style.borderRadius = '15px';
+panel.style.fontFamily = 'Google Sans, Arial, sans-serif';
 
 // Create close button
 const closeButton = document.createElement('button');
 closeButton.innerText = 'Close';
 closeButton.style.cursor = 'pointer';
-closeButton.style.backgroundColor = '#FF5733'; // Change button color
-closeButton.style.color = 'white'; // Text color
-closeButton.style.border = 'none'; // Remove default border
-closeButton.style.borderRadius = '5px'; // Rounded corners for button
-closeButton.style.padding = '5px 10px'; // Smaller padding for a compact look
-closeButton.style.fontSize = '14px'; // Smaller font size
-closeButton.style.transition = 'background-color 0.3s'; // Transition effect
-closeButton.style.marginRight = '10px'; // Space between buttons
+closeButton.style.backgroundColor = '#FF5733';
+closeButton.style.color = 'white';
+closeButton.style.border = 'none';
+closeButton.style.borderRadius = '5px';
+closeButton.style.padding = '5px 10px';
+closeButton.style.fontSize = '14px';
+closeButton.style.transition = 'background-color 0.3s';
+closeButton.style.marginRight = '10px';
 
 // Create drag handle
 const dragHandle = document.createElement('button');
 dragHandle.innerText = 'Drag';
 dragHandle.style.cursor = 'grab';
-dragHandle.style.backgroundColor = '#FFC300'; // Yellow color for drag button
-dragHandle.style.color = 'black'; // Text color
-dragHandle.style.border = 'none'; // Remove default border
-dragHandle.style.borderRadius = '5px'; // Rounded corners for button
-dragHandle.style.padding = '5px 10px'; // Smaller padding for a compact look
-dragHandle.style.fontSize = '14px'; // Smaller font size
-dragHandle.style.transition = 'background-color 0.3s'; // Transition effect
-dragHandle.style.marginRight = '10px'; // Space between buttons
+dragHandle.style.backgroundColor = '#FFC300';
+dragHandle.style.color = 'black';
+dragHandle.style.border = 'none';
+dragHandle.style.borderRadius = '5px';
+dragHandle.style.padding = '5px 15px';
+dragHandle.style.fontSize = '14px';
+dragHandle.style.transition = 'background-color 0.3s';
+dragHandle.style.marginRight = '10px';
 
 // Create reload button
 const reloadButton = document.createElement('button');
 reloadButton.innerText = 'Reload';
 reloadButton.style.cursor = 'pointer';
-reloadButton.style.backgroundColor = '#4169e1'; // Green color for reload button
-reloadButton.style.color = 'white'; // Text color
-reloadButton.style.border = 'none'; // Remove default border
-reloadButton.style.borderRadius = '5px'; // Rounded corners for button
-reloadButton.style.padding = '5px 10px'; // Padding for a compact look
-reloadButton.style.fontSize = '14px'; // Smaller font size
-reloadButton.style.transition = 'background-color 0.3s'; // Transition effect
-reloadButton.style.marginRight = '10px'; // Space between buttons
+reloadButton.style.backgroundColor = '#4169e1';
+reloadButton.style.color = 'white';
+reloadButton.style.border = 'none';
+reloadButton.style.borderRadius = '5px';
+reloadButton.style.padding = '5px 10px';
+reloadButton.style.fontSize = '14px';
+reloadButton.style.transition = 'background-color 0.3s';
+reloadButton.style.marginRight = '10px';
 
 // Create search bar
 const searchBar = document.createElement('input');
 searchBar.type = 'text';
 searchBar.placeholder = 'Enter URL';
-searchBar.style.width = '150px'; // Set a fixed width for the search bar
-searchBar.style.borderRadius = '15px'; // Rounded corners
-searchBar.style.border = '1px solid #ccc'; // Light border
-searchBar.style.padding = '5px'; // Padding for the input field
-searchBar.style.fontFamily = 'Google Sans, Arial, sans-serif'; // Set font for search bar
+searchBar.style.borderRadius = '15px';
+searchBar.style.border = '1px solid #ccc';
+searchBar.style.padding = '5px';
+searchBar.style.fontFamily = 'Google Sans, Arial, sans-serif';
+searchBar.style.flexGrow = '1';
+searchBar.style.marginRight = '10px';
+
+// Create profile picture
+const profilePic = document.createElement('img');
+profilePic.src = localStorage.getItem('profilePic') || 'https://via.placeholder.com/40'; // Load from localStorage
+profilePic.alt = 'Profile Picture';
+profilePic.style.width = '40px';
+profilePic.style.height = '40px';
+profilePic.style.borderRadius = '50%';
+profilePic.style.cursor = 'pointer';
+
+// Create profile menu
+const profileMenu = document.createElement('div');
+profileMenu.style.position = 'absolute';
+profileMenu.style.backgroundColor = 'white';
+profileMenu.style.border = '1px solid #ccc';
+profileMenu.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+profileMenu.style.padding = '10px';
+profileMenu.style.borderRadius = '10px';
+profileMenu.style.display = 'none';
+profileMenu.style.zIndex = '2147483647';
+profileMenu.style.fontFamily = 'Google Sans, Arial, sans-serif';
+
+const menuItem1 = document.createElement('div');
+menuItem1.innerText = 'Profile';
+menuItem1.style.padding = '5px 0';
+menuItem1.style.cursor = 'pointer';
+
+const menuItem2 = document.createElement('div');
+menuItem2.innerText = 'Settings';
+menuItem2.style.padding = '5px 0';
+menuItem2.style.cursor = 'pointer';
+
+const menuItem3 = document.createElement('div');
+menuItem3.innerText = 'History';
+menuItem3.style.padding = '5px 0';
+menuItem3.style.cursor = 'pointer';
+
+profileMenu.appendChild(menuItem1);
+profileMenu.appendChild(menuItem2);
+profileMenu.appendChild(menuItem3);
+document.body.appendChild(profileMenu);
+
+// Load the history of URLs from localStorage
+let urlHistory = JSON.parse(localStorage.getItem('urlHistory')) || [];
+
+// Function to save URL history to localStorage
+function saveUrlHistory() {
+  localStorage.setItem('urlHistory', JSON.stringify(urlHistory));
+}
+
+// Function to update the profile menu position
+function updateProfileMenuPosition() {
+  const rect = profilePic.getBoundingClientRect();
+  profileMenu.style.top = `${rect.bottom + window.scrollY}px`;
+  profileMenu.style.left = `${rect.left + window.scrollX}px`;
+}
+
+// Toggle profile menu visibility when clicking the profile picture
+profilePic.addEventListener('click', () => {
+  updateProfileMenuPosition();
+  profileMenu.style.display = profileMenu.style.display === 'none' ? 'block' : 'none';
+});
+
+// Hide profile menu when clicking outside
+document.addEventListener('click', (event) => {
+  if (!profilePic.contains(event.target) && !profileMenu.contains(event.target)) {
+    profileMenu.style.display = 'none';
+  }
+});
 
 // Change close button color on hover
 closeButton.addEventListener('mouseover', () => {
-  closeButton.style.backgroundColor = '#C70039'; // Darker red on hover
+  closeButton.style.backgroundColor = '#C70039';
 });
 
 closeButton.addEventListener('mouseout', () => {
-  closeButton.style.backgroundColor = '#FF5733'; // Reset color
+  closeButton.style.backgroundColor = '#FF5733';
 });
 
 // Change drag button color on hover
 dragHandle.addEventListener('mouseover', () => {
-  dragHandle.style.backgroundColor = '#FFB300'; // Darker yellow on hover
+  dragHandle.style.backgroundColor = '#FFB300';
 });
 
 dragHandle.addEventListener('mouseout', () => {
-  dragHandle.style.backgroundColor = '#FFC300'; // Reset color
+  dragHandle.style.backgroundColor = '#FFC300';
 });
 
 // Change reload button color on hover
 reloadButton.addEventListener('mouseover', () => {
-  reloadButton.style.backgroundColor = '#1f44b5'; // Darker green on hover
+  reloadButton.style.backgroundColor = '#1f44b5';
 });
 
 reloadButton.addEventListener('mouseout', () => {
-  reloadButton.style.backgroundColor = '#4169e1'; // Reset color
+  reloadButton.style.backgroundColor = '#4169e1';
 });
 
 // Create iframe for displaying content
 const iframe = document.createElement('iframe');
-iframe.src = 'https://gghunter12.github.io/test/YouTube.html'; // Default URL
-iframe.style.width = '100%'; // 100% of the panel's width
-iframe.style.height = 'calc(100% - 100px)'; // Adjust height dynamically, leaving space for buttons and padding
-iframe.style.borderRadius = '10px'; // Curved edges for the iframe
+iframe.src = 'https://gghunter12.github.io/test/YouTube.html';
+iframe.style.width = '100%';
+iframe.style.height = 'calc(100% - 100px)';
+iframe.style.borderRadius = '10px';
 iframe.frameBorder = '0';
 iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
 iframe.allowFullscreen = true;
@@ -104,33 +174,34 @@ iframe.allowFullscreen = true;
 // Create text label below the video
 const textLabel = document.createElement('div');
 textLabel.innerText = 'made by your fav coder (snoopy)💯💯 and with AI help';
-textLabel.style.color = 'white'; // Set text color
-textLabel.style.marginTop = '5px'; // Space between video and text
-textLabel.style.textAlign = 'center'; // Center the text
-textLabel.style.fontFamily = 'Google Sans, Arial, sans-serif'; // Set font for the text label
+textLabel.style.color = 'white';
+textLabel.style.marginTop = '5px';
+textLabel.style.textAlign = 'center';
+textLabel.style.fontFamily = 'Google Sans, Arial, sans-serif';
 
 // Create a container for buttons and search bar
 const controlsContainer = document.createElement('div');
-controlsContainer.style.display = 'flex'; // Arrange buttons side by side
-controlsContainer.style.alignItems = 'center'; // Center align buttons vertically
-controlsContainer.style.marginBottom = '10px'; // Space below the controls
+controlsContainer.style.display = 'flex';
+controlsContainer.style.alignItems = 'center';
+controlsContainer.style.marginBottom = '10px';
 
 // Append elements to the controls container
 controlsContainer.appendChild(closeButton);
 controlsContainer.appendChild(dragHandle);
-controlsContainer.appendChild(reloadButton); // Append reload button
-controlsContainer.appendChild(searchBar); // Append the search bar next to the drag button
+controlsContainer.appendChild(reloadButton);
+controlsContainer.appendChild(searchBar);
+controlsContainer.appendChild(profilePic);
 
-// Append controls to the panel
-panel.appendChild(controlsContainer); // Append controls container
+// Append elements to the panel
+panel.appendChild(controlsContainer);
 panel.appendChild(iframe);
 panel.appendChild(textLabel);
 document.body.appendChild(panel);
 
-// Function to update the size of the drag button
+// Function to update button sizes
 function updateButtonSize() {
-  const panelWidth = panel.clientWidth;
-  dragHandle.style.width = ${panelWidth / 4 - 20}px; // Adjust width of drag button
+  dragHandle.style.width = `${panel.clientWidth / 5}px`;
+  searchBar.style.width = `${panel.clientWidth - 250}px`; // Adjust search bar width dynamically
 }
 
 // Make the panel movable only when dragging the dragHandle
@@ -141,44 +212,149 @@ dragHandle.addEventListener('mousedown', (e) => {
   isDragging = true;
   offset.x = e.clientX - panel.getBoundingClientRect().left;
   offset.y = e.clientY - panel.getBoundingClientRect().top;
-  dragHandle.style.cursor = 'grabbing'; // Change cursor while dragging
+  dragHandle.style.cursor = 'grabbing'; // Change cursor style
 });
 
 document.addEventListener('mousemove', (e) => {
   if (isDragging) {
-    panel.style.left = ${e.clientX - offset.x}px;
-    panel.style.top = ${e.clientY - offset.y}px;
+    panel.style.left = `${e.clientX - offset.x}px`;
+    panel.style.top = `${e.clientY - offset.y}px`;
   }
 });
 
 document.addEventListener('mouseup', () => {
   isDragging = false;
-  dragHandle.style.cursor = 'grab'; // Reset cursor
+  dragHandle.style.cursor = 'grab'; // Reset cursor style
 });
 
-// Close button functionality - removes itself from the DOM
+// Close button functionality
 closeButton.addEventListener('click', () => {
-  closeButton.remove(); // Remove the close button
-  panel.remove(); // Remove the panel
+  panel.style.display = 'none'; // Hide panel
 });
 
-// Reload button functionality - reloads the iframe
+// Reload button functionality
 reloadButton.addEventListener('click', () => {
-  iframe.src = iframe.src; // Reloads the iframe's content
+  iframe.src = iframe.src; // Reload the iframe
 });
 
-// Search bar functionality - change iframe source on input
+// Search functionality
 searchBar.addEventListener('keypress', (event) => {
   if (event.key === 'Enter') {
-    let url = searchBar.value.trim(); // Get and trim the input value
-    
-    // Add "https://" if it's missing
-    if (!/^https?:\/\//i.test(url) && url.length > 0) {
-      url = 'https://' + url;
+    let url = searchBar.value.trim();
+    if (!/^https?:\/\//i.test(url)) {
+      url = 'https://' + url; // Prepend 'https://' if not present
     }
-    
-    iframe.src = url; // Set the iframe's src to the value in the search bar
-    searchBar.value = ''; // Clear the search bar after submission
+
+    // Check if URL is valid
+    const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,})|' + // domain name
+    'localhost|' + // localhost
+    '\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|' + // IP address
+    '\\[?[a-fA-F0-9]*:[a-fA-F0-9:]+\\])' + // IPv6
+    '(\\:\\d+)?(\\/[-a-zA-Z0-9+&@#\\/%?=~_|!:,.;]*[a-zA-Z0-9+&@#\\/%=~_|])?');
+
+    if (urlPattern.test(url)) {
+      urlHistory.push(url);
+      saveUrlHistory(); // Save URL history to localStorage
+      iframe.src = url; // Change iframe source to the new URL
+      searchBar.value = ''; // Clear the search bar
+    } else {
+      alert('Invalid URL. Please enter a valid one.');
+    }
+  }
+});
+
+// Profile menu functionality - history option
+menuItem3.addEventListener('click', () => {
+  profileMenu.style.display = 'none'; // Hide the profile menu
+  panel.innerHTML = ''; // Clear the panel
+
+  // Create a title for the history
+  const historyTitle = document.createElement('h2');
+  historyTitle.innerText = 'Your History :)';
+  historyTitle.style.textAlign = 'center';
+  historyTitle.style.color = 'black'; // Adjust color if needed
+
+  // Create a history list
+  const historyList = document.createElement('ul');
+  historyList.style.listStyleType = 'none';
+  historyList.style.padding = '0';
+
+  urlHistory.forEach((url, index) => {
+    const listItem = document.createElement('li');
+    listItem.innerText = `${index + 1}. ${url}`;
+    listItem.style.cursor = 'pointer';
+    listItem.style.padding = '5px';
+    listItem.style.borderBottom = '1px solid #ccc';
+
+    // Load URL in iframe when clicked
+    listItem.addEventListener('click', () => {
+      iframe.src = url;
+      panel.innerHTML = '';
+      panel.appendChild(controlsContainer);
+      panel.appendChild(iframe);
+      panel.appendChild(textLabel);
+    });
+
+    historyList.appendChild(listItem);
+  });
+
+  // Create a button to go back to the main panel UI
+  const backButton = document.createElement('button');
+  backButton.innerText = 'haha no going back ;)';
+  backButton.style.cursor = 'pointer';
+  backButton.style.backgroundColor = '#FF5733';
+  backButton.style.color = 'white';
+  backButton.style.border = 'none';
+  backButton.style.borderRadius = '5px';
+  backButton.style.padding = '5px 10px';
+  backButton.style.fontSize = '14px';
+  backButton.style.transition = 'background-color 0.3s';
+  backButton.style.marginTop = '10px';
+
+  // Go back to the main panel UI when the button is clicked
+  backButton.addEventListener('click', () => {
+    panel.innerHTML = '';
+    panel.appendChild(controlsContainer);
+    panel.appendChild(iframe);
+    panel.appendChild(textLabel);
+  });
+
+  // Append title, history list, and back button to panel
+  panel.appendChild(historyTitle);
+  panel.appendChild(historyList);
+  panel.appendChild(backButton);
+});
+
+// Drag-and-drop functionality for setting the profile picture
+profilePic.addEventListener('dragover', (event) => {
+  event.preventDefault(); // Prevent default behavior (Prevent file from being opened)
+  profilePic.style.opacity = '0.5'; // Visual feedback
+});
+
+profilePic.addEventListener('dragleave', () => {
+  profilePic.style.opacity = '1'; // Reset opacity
+});
+
+profilePic.addEventListener('drop', (event) => {
+  event.preventDefault();
+  profilePic.style.opacity = '1'; // Reset opacity
+
+  const files = event.dataTransfer.files;
+  if (files.length > 0) {
+    const file = files[0];
+
+    // Check if the dropped file is an image
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        profilePic.src = e.target.result; // Set the new profile pic
+        localStorage.setItem('profilePic', e.target.result); // Save it in localStorage
+      };
+      reader.readAsDataURL(file); // Read the file as a Data URL
+    } else {
+      alert('Please drop an image file.');
+    }
   }
 });
 
@@ -196,10 +372,10 @@ let gPressed = false;
 document.addEventListener('keydown', (event) => {
   if (event.key.toLowerCase() === 's') sPressed = true;
   if (event.key.toLowerCase() === 'g') gPressed = true;
-  
+
   if (sPressed && gPressed) {
-    panelVisible = !panelVisible; // Toggle the visibility state
-    panel.style.display = panelVisible ? 'block' : 'none'; // Show or hide the panel based on state
+    panelVisible = !panelVisible;
+    panel.style.display = panelVisible ? 'block' : 'none';
   }
 });
 
@@ -212,10 +388,10 @@ document.addEventListener('keyup', (event) => {
 // Show initial prompt
 alert("UI Frame by snoopy | Use keys 'S' + 'G' to hide or unhide the UI");
 
-// Update iframe size when the panel is resized
+// Update iframe size and search bar size when the panel is resized
 new ResizeObserver(() => {
-  iframe.style.height = calc(${panel.clientHeight}px - 100px); // Adjust iframe height
-  updateButtonSize(); // Update the drag button size
+  iframe.style.height = `calc(${panel.clientHeight}px - 100px)`;
+  updateButtonSize();
 }).observe(panel);
 
 // Initial size adjustment
