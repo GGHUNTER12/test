@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's My IP?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #2E3A59;
+        }
+        .info-box {
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            display: inline-block;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .info {
+            font-size: 1.5rem;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Your IP Information</h1>
+    <div class="info-box">
+        <div class="info">IP: <span id="ip">Loading...</span></div>
+        <div class="info">Location: <span id="location">Loading...</span></div>
+        <div class="info">ISP: <span id="isp">Loading...</span></div>
+    </div>
+
+    <script>
+        async function getIPInfo() {
+            try {
+                // Fetch IP and related info from ipinfo.io
+                let response = await fetch('https://ipinfo.io/json', { mode: 'cors' }); // Use CORS mode
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data");
+                }
+                let data = await response.json();
+
+                // Update the page with the fetched data
+                document.getElementById('ip').innerText = data.ip;
+                document.getElementById('location').innerText = `${data.city}, ${data.region} (${data.country})`;
+                document.getElementById('isp').innerText = data.org;
+            } catch (error) {
+                // Handle errors gracefully
+                document.getElementById('ip').innerText = "Error fetching IP";
+                document.getElementById('location').innerText = "Error fetching location";
+                document.getElementById('isp').innerText = "Error fetching ISP";
+            }
+        }
+
+        // Call the function as soon as the page loads
+        window.onload = getIPInfo;
+    </script>
+
+</body>
+</html>
