@@ -37,13 +37,14 @@
         <div class="info">IP: <span id="ip">Loading...</span></div>
         <div class="info">Location: <span id="location">Loading...</span></div>
         <div class="info">ISP: <span id="isp">Loading...</span></div>
+        <div class="info">User Agent: <span id="user-agent">Loading...</span></div>
     </div>
 
     <script>
         async function getIPInfo() {
             try {
                 // Fetch IP and related info from ipinfo.io
-                let response = await fetch('https://ipinfo.io/json', { mode: 'cors' }); // Use CORS mode
+                let response = await fetch('https://ipinfo.io/json', { mode: 'cors' });
                 if (!response.ok) {
                     throw new Error("Failed to fetch data");
                 }
@@ -53,11 +54,15 @@
                 document.getElementById('ip').innerText = data.ip;
                 document.getElementById('location').innerText = `${data.city}, ${data.region} (${data.country})`;
                 document.getElementById('isp').innerText = data.org;
+
+                // Display User Agent
+                document.getElementById('user-agent').innerText = navigator.userAgent;
             } catch (error) {
                 // Handle errors gracefully
                 document.getElementById('ip').innerText = "Error fetching IP";
                 document.getElementById('location').innerText = "Error fetching location";
                 document.getElementById('isp').innerText = "Error fetching ISP";
+                document.getElementById('user-agent').innerText = "Error fetching User Agent";
             }
         }
 
