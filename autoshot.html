@@ -2,11 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/screenshot.html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
+    <title>Create about:blank Page and Inject HTML</title>
 </head>
 <body>
-    <p>If you are not redirected, <a href="https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/screenshot.html">click here</a>.</p>
+    <script>
+        // Create a new window/tab with 'about:blank'
+        let blankPage = window.open('about:blank');
+
+        // Fetch the HTML content from the provided URL
+        fetch('https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/screenshot.html')
+            .then(response => response.text())  // Get the response text (HTML content)
+            .then(htmlContent => {
+                // Inject the fetched HTML content into the new blank page
+                blankPage.document.open();
+                blankPage.document.write(htmlContent);
+                blankPage.document.close();  // Close the document stream
+            })
+            .catch(error => console.error('Error fetching HTML:', error));
+    </script>
+    <p>Creating a new about:blank page and injecting content...</p>
 </body>
 </html>
