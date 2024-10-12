@@ -99,7 +99,7 @@
                 if (!response.ok) throw new Error("Failed to fetch IP data from ipwhois.app");
                 return await response.json();
             } catch (error) {
-                console.warn("IP data request failed, trying fallback service:", error);
+                console.warn("IP data request failed, trying backup service:", error);
 
                 // Attempt to fetch from ip-api.com as a fallback
                 try {
