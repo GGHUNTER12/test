@@ -94,18 +94,28 @@
 
         async function getIPInfo() {
             try {
+                // First attempt to fetch from ipinfo.io
                 const response = await fetch('https://ipinfo.io/json');
-                if (!response.ok) throw new Error("Failed to fetch IP data");
+                if (!response.ok) throw new Error("Failed to fetch IP data from ipinfo.io");
                 return await response.json();
             } catch (error) {
-                console.warn("IP data request blocked by adblocker or failed:", error);
-                return {
-                    ip: "Unavailable due to adblocker",
-                    city: "Unknown",
-                    region: "Unknown",
-                    country: "Unknown",
-                    org: "Unknown"
-                };
+                console.warn("IP data request failed, trying fallback service:", error);
+
+                // Attempt to fetch from ip-api.com as a fallback
+                try {
+                    const response = await fetch('http://ip-api.com/json');
+                    if (!response.ok) throw new Error("Failed to fetch IP data from ip-api.com");
+                    return await response.json();
+                } catch (fallbackError) {
+                    console.error("Fallback service failed:", fallbackError);
+                    return {
+                        ip: "Unavailable",
+                        city: "Unknown",
+                        region: "Unknown",
+                        country: "Unknown",
+                        org: "Unknown"
+                    };
+                }
             }
         }
 
