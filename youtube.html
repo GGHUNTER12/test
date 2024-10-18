@@ -1,0 +1,115 @@
+// Create a new window with 'about:blank' as the URL
+const newTab = window.open('about:blank', '_blank');
+
+// Define the HTML content to be written into the new tab
+const htmlContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Searcher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #282828;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .input-container {
+            margin-top: 20px;
+        }
+        input {
+            padding: 10px;
+            width: 300px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            padding: 10px;
+            background-color: #ff0000;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #cc0000;
+        }
+        iframe {
+            width: 100%;
+            max-width: 720px;
+            height: 405px;
+            margin-top: 20px;
+        }
+        .instructions {
+            background-color: #444;
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 720px;
+            margin: 10px auto;
+            transition: opacity 0.3s ease;
+        }
+        .hidden {
+            opacity: 0;
+            visibility: hidden;
+            height: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>YouTube Video Searcher</h1>
+    
+    <div class="input-container">
+        <input type="text" id="videoId" placeholder="Enter YouTube Video ID">
+        <button onclick="loadVideo()">Play Video</button>
+        <button onclick="openFullScreen()">Open Full Screen</button>
+    </div>
+
+    <div id="instructions" class="instructions">
+        <p>🔍 <strong>How to get the YouTube Video ID:</strong></p>
+        <p>The Video ID is the part of the YouTube link after "v=". For example, in the link:</p>
+        <p><code>https://www.youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong></code></p>
+        <p>The Video ID is: <strong>dQw4w9WgXcQ</strong></p>
+        <p>Copy this ID and paste it above to watch the video.</p>
+    </div>
+
+    <iframe id="videoFrame" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    <script>
+        function loadVideo() {
+            const videoId = document.getElementById('videoId').value.trim();
+            if (videoId) {
+                const iframeSrc = \`https://www.youtube-nocookie.com/embed/\${videoId}?autoplay=1\`;
+                document.getElementById('videoFrame').src = iframeSrc;
+                
+                // Hide the instructions when a video is loaded
+                document.getElementById('instructions').classList.add('hidden');
+            } else {
+                alert('Please enter a valid YouTube video ID.');
+            }
+        }
+
+        function openFullScreen() {
+            const videoId = document.getElementById('videoId').value.trim();
+            if (videoId) {
+                const url = \`https://www.youtube-nocookie.com/embed/\${videoId}?autoplay=1\`;
+                const newWindow = window.open('about:blank', '_blank');
+                newWindow.document.write(\`<iframe src="\${url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width: 100%; height: 100vh;"></iframe>\`);
+                newWindow.document.title = 'YouTube Video - Fullscreen';
+            } else {
+                alert('Please enter a valid YouTube video ID.');
+            }
+        }
+    </script>
+</body>
+</html>
+`;
+
+// Write the HTML content into the new tab's document
+newTab.document.open();
+newTab.document.write(htmlContent);
+newTab.document.close();
