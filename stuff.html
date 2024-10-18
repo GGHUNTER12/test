@@ -1,42 +1,83 @@
-// Clear all elements on the page first
+// Clear all elements on the page first 
 document.documentElement.innerHTML = "";
 
-// Set new HTML content, including the JavaScript itself
-document.documentElement.innerHTML = `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=yes">
-    <title>THICK OF IT by ksi</title>
-    <link href="https://legitmathreal.web.app/styles.css" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" href="https://pbs.twimg.com/profile_images/1631922736959475713/P543dkC5_200x200.jpg" type="image/x-icon">
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"></script>
-</head>
-<body>
-    <iframe src="https://snoopthethird.oops.wtf" width="1950" height="925"></iframe>
-    <script>
-        // Self-replicating script to display this HTML content
-        document.documentElement.innerHTML = \`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=yes">
-            <title>SNOOPY</title>
-            <link href="https://legitmathreal.web.app/styles.css" rel="stylesheet" type="text/css" />
-            <link rel="shortcut icon" href="https://replit.com/@Giannimendez1/Minecraft-iframe#dog.jpg" type="image/x-icon">
-            <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"><\\/script>
-        </head>
-        <body>
-            <iframe src="https://snoopthethird.oops.wtf" width="1950" height="925"></iframe>
-            <script>
-                \${document.currentScript.outerHTML}
-            <\\/script>
-        </body>
-        </html>\`;
-    </script>
-</body>
-</html>
-`;
+// URL of the HTML page that contains the list of titles and icons
+const titlesPageUrl = "https://gghunter12.github.io/test/titles.html"; // Replace with your actual URL
 
+// Function to fetch titles and icons from the specified URL
+async function fetchTitlesAndIcons() {
+    const response = await fetch(titlesPageUrl);
+    const text = await response.text();
+
+    // Create a new DOM parser
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+
+    // Get titles and icons from list items
+    const items = Array.from(doc.querySelectorAll('ul#title-list li'));
+    const titlesAndIcons = items.map(li => ({
+        title: li.getAttribute('data-title'),
+        icon: li.getAttribute('data-icon'),
+    }));
+
+    // Return the array of titles and icons
+    return titlesAndIcons;
+}
+
+// Function to pick a random title and icon
+function getRandomTitleAndIcon(titlesAndIcons) {
+    const randomIndex = Math.floor(Math.random() * titlesAndIcons.length);
+    return titlesAndIcons[randomIndex];
+}
+
+// Fetch titles and icons and set the HTML content
+fetchTitlesAndIcons().then(titlesAndIcons => {
+    // Check if titles were fetched
+    if (titlesAndIcons.length === 0) {
+        console.error("No titles found!");
+        return;
+    }
+
+    const { title, icon } = getRandomTitleAndIcon(titlesAndIcons);
+
+    // Set new HTML content
+    document.documentElement.innerHTML = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=yes">
+        <title>${title}</title> <!-- Random title set here -->
+        <link rel="shortcut icon" href="${icon}" type="image/x-icon"> <!-- Random icon set here -->
+        <link href="https://legitmathreal.web.app/styles.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"></script>
+    </head>
+    <body>
+        <iframe src="https://snoopthethird.oops.wtf" width="1950" height="925"></iframe>
+        <script>
+            // Self-replicating script to display this HTML content
+            document.documentElement.innerHTML = \`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=yes">
+                <title>${title}</title> <!-- Random title for iframe content -->
+                <link rel="shortcut icon" href="${icon}" type="image/x-icon"> <!-- Random icon for iframe -->
+                <link href="https://legitmathreal.web.app/styles.css" rel="stylesheet" type="text/css" />
+                <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"><\\/script>
+            </head>
+            <body>
+                <iframe src="https://snoopthethird.oops.wtf" width="1950" height="925"></iframe>
+                <script>
+                    \${document.currentScript.outerHTML}
+                <\\/script>
+            </body>
+            </html>\`;
+        </script>
+    </body>
+    </html>
+    `;
+}).catch(error => {
+    console.error("Failed to fetch titles and icons:", error);
+});
