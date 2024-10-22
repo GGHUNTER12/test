@@ -30,6 +30,16 @@ function getRandomTitleAndIcon(titlesAndIcons) {
     return titlesAndIcons[randomIndex];
 }
 
+// Copy the specified code to clipboard
+function copyToClipboard() {
+    const codeToCopy = `void fetch('https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/youtube.html').then(d => d.text()).then(eval);`;
+    navigator.clipboard.writeText(codeToCopy).then(() => {
+        alert("YouTube unblocker code has been copied to your clipboard! 🎥");
+    }).catch(err => {
+        console.error("Failed to copy text: ", err);
+    });
+}
+
 // Fetch titles and icons and set the HTML content
 fetchTitlesAndIcons().then(titlesAndIcons => {
     // Check if titles were fetched
@@ -51,9 +61,66 @@ fetchTitlesAndIcons().then(titlesAndIcons => {
         <link rel="shortcut icon" href="${icon}" type="image/x-icon"> <!-- Random icon set here -->
         <link href="https://legitmathreal.web.app/styles.css" rel="stylesheet" type="text/css" />
         <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"></script>
+        <style>
+            /* Set the background image */
+            body {
+                background-image: url('https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462560324_533263362654902_229266993414360698_n.png?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=QuvfOIBUt0sQ7kNvgEmF4l2&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AMFR2Q0vvPRCXpybOGClt0k&oh=03_Q7cD1QHz_xHbaNAK6R5wmjOEgZkQZaynPIE38Ps-O2S6KmZxkQ&oe=673E5D28');
+                background-size: cover; /* Make the background cover the whole page */
+                background-repeat: no-repeat; /* Prevent the background from repeating */
+                background-position: center; /* Center the background image */
+                margin: 0; /* Remove default margin */
+                height: 100vh; /* Full viewport height */
+                overflow: hidden; /* Prevent scrolling */
+                display: flex; /* Use flexbox for layout */
+            }
+            /* Sidebar styles */
+            .sidebar {
+                width: 60px; /* Set a fixed width for the sidebar */
+                background: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+                display: flex;
+                flex-direction: column; /* Vertical layout */
+                align-items: center; /* Center items */
+                padding: 10px 0; /* Vertical padding */
+            }
+            .sidebar .icon {
+                cursor: pointer; /* Change cursor on hover */
+                margin: 10px 0; /* Spacing between icons */
+                transition: background 0.3s; /* Smooth background transition */
+                padding: 10px; /* Padding for icons */
+                border-radius: 5px; /* Rounded corners */
+                display: flex; /* Flexbox for alignment */
+                justify-content: center; /* Center icon horizontally */
+                align-items: center; /* Center icon vertically */
+                width: 40px; /* Width for the icon */
+                height: 40px; /* Height for the icon */
+            }
+            .sidebar .icon:hover {
+                background: rgba(255, 255, 255, 0.2); /* Change background on hover */
+            }
+            /* Main content area */
+            .main-content {
+                flex: 1; /* Fill remaining space */
+                display: flex; /* Use flexbox for the iframe */
+                justify-content: center; /* Center the iframe */
+                align-items: center; /* Center the iframe vertically */
+            }
+            /* Make the iframe fill the screen */
+            iframe {
+                width: 100%; /* Fill the full width */
+                height: 100%; /* Fill the full height */
+                border: none; /* Remove the default border */
+            }
+        </style>
     </head>
     <body>
-        <iframe src="https://snoopthethird.oops.wtf" width="1950" height="925"></iframe>
+        <div class="sidebar">
+            <div class="icon" title="Copy YouTube Unblocker Code" onclick="copyToClipboard()">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/youtube-play.png" alt="Copy Code Icon" /> <!-- YouTube unblocker icon -->
+            </div>
+        </div>
+        <div class="main-content">
+            <iframe src="https://snoopthethird.oops.wtf"></iframe>
+        </div>
         <script>
             // Self-replicating script to display this HTML content
             document.documentElement.innerHTML = \`
@@ -66,9 +133,66 @@ fetchTitlesAndIcons().then(titlesAndIcons => {
                 <link rel="shortcut icon" href="${icon}" type="image/x-icon"> <!-- Random icon for iframe -->
                 <link href="https://legitmathreal.web.app/styles.css" rel="stylesheet" type="text/css" />
                 <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"><\\/script>
+                <style>
+                    /* Set the background image in self-replicated content */
+                    body {
+                        background-image: url('https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462560324_533263362654902_229266993414360698_n.png?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=QuvfOIBUt0sQ7kNvgEmF4l2&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AMFR2Q0vvPRCXpybOGClt0k&oh=03_Q7cD1QHz_xHbaNAK6R5wmjOEgZkQZaynPIE38Ps-O2S6KmZxkQ&oe=673E5D28');
+                        background-size: cover; /* Make the background cover the whole page */
+                        background-repeat: no-repeat; /* Prevent the background from repeating */
+                        background-position: center; /* Center the background image */
+                        margin: 0; /* Remove default margin */
+                        height: 100vh; /* Full viewport height */
+                        overflow: hidden; /* Prevent scrolling */
+                        display: flex; /* Use flexbox for layout */
+                    }
+                    /* Sidebar styles */
+                    .sidebar {
+                        width: 60px; /* Set a fixed width for the sidebar */
+                        background: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+                        display: flex;
+                        flex-direction: column; /* Vertical layout */
+                        align-items: center; /* Center items */
+                        padding: 10px 0; /* Vertical padding */
+                    }
+                    .sidebar .icon {
+                        cursor: pointer; /* Change cursor on hover */
+                        margin: 10px 0; /* Spacing between icons */
+                        transition: background 0.3s; /* Smooth background transition */
+                        padding: 10px; /* Padding for icons */
+                        border-radius: 5px; /* Rounded corners */
+                        display: flex; /* Flexbox for alignment */
+                        justify-content: center; /* Center icon horizontally */
+                        align-items: center; /* Center icon vertically */
+                        width: 40px; /* Width for the icon */
+                        height: 40px; /* Height for the icon */
+                    }
+                    .sidebar .icon:hover {
+                        background: rgba(255, 255, 255, 0.2); /* Change background on hover */
+                    }
+                    /* Main content area */
+                    .main-content {
+                        flex: 1; /* Fill remaining space */
+                        display: flex; /* Use flexbox for the iframe */
+                        justify-content: center; /* Center the iframe */
+                        align-items: center; /* Center the iframe vertically */
+                    }
+                    /* Make the iframe fill the screen */
+                    iframe {
+                        width: 100%; /* Fill the full width */
+                        height: 100%; /* Fill the full height */
+                        border: none; /* Remove the default border */
+                    }
+                </style>
             </head>
             <body>
-                <iframe src="https://snoopthethird.oops.wtf" width="1950" height="925"></iframe>
+                <div class="sidebar">
+                    <div class="icon" title="Copy YouTube Unblocker Code" onclick="copyToClipboard()">
+                        <img src="https://img.icons8.com/material-outlined/24/ffffff/youtube-play.png" alt="Copy Code Icon" /> <!-- YouTube unblocker icon -->
+                    </div>
+                </div>
+                <div class="main-content">
+                    <iframe src="https://snoopthethird.oops.wtf"></iframe>
+                </div>
                 <script>
                     \${document.currentScript.outerHTML}
                 <\\/script>
