@@ -40,6 +40,32 @@ function copyToClipboard() {
     });
 }
 
+// Change the background by dropping an image
+function handleFileDrop(event) {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.body.style.backgroundImage = `url('${e.target.result}')`;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert("Please drop a valid image file.");
+    }
+}
+
+// Prevent default behavior for drag and drop
+function preventDefaults(event) {
+    event.preventDefault();
+    event.stopPropagation();
+}
+
+// Add event listeners for drag and drop functionality
+document.addEventListener('dragenter', preventDefaults, false);
+document.addEventListener('dragover', preventDefaults, false);
+document.addEventListener('drop', handleFileDrop, false);
+
 // Fetch titles and icons and set the HTML content
 fetchTitlesAndIcons().then(titlesAndIcons => {
     // Check if titles were fetched
@@ -114,94 +140,27 @@ fetchTitlesAndIcons().then(titlesAndIcons => {
     </head>
     <body>
         <div class="sidebar">
-            <div class="icon" title="Copy YouTube Unblocker Code" onclick="copyToClipboard()">
-                <img src="https://img.icons8.com/material-outlined/24/ffffff/youtube-play.png" alt="Copy Code Icon" /> <!-- YouTube unblocker icon -->
+            <div class="icon" title="Logo">
+                <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/462567906_1264779828100561_3681124885906587443_n.png?_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=TdfxAyM_1xcQ7kNvgFY7E4Q&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&_nc_gid=A5JTSEpNcg82oAZJlvE699d&oh=03_Q7cD1QHMTzn_yHYAneIMzOx3Y-QZfK9Vr41vLupgA02YaQbH4A&oe=673FC5AB" alt="Top Icon" style="width: 40px; height: 40px;" />
             </div>
+            <div class="icon" title="Home" onclick="document.querySelector('iframe').src='https://snoopthethird.oops.wtf'">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/home.png" alt="Home Icon" /> <!-- Home icon -->
+            </div>
+            <div class="icon" title="YouTube Unblocker" onclick="document.querySelector('iframe').src='https://yt5s.is/en/youtube-to-mp4/'">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/youtube-play.png" alt="YouTube Unblocker Icon" /> <!-- YouTube unblocker icon -->
+            </div>
+            <div class="icon" title="ChatGPT" onclick="document.querySelector('iframe').src='https://gptcall.net/chat.html?data=%7B%22contact%22%3A%7B%22id%22%3A%22mQzEosdaqlUftU-PtKSEC%22%2C%22flow%22%3Atrue%7D%7D'">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/chat.png" alt="ChatGPT Icon" /> <!-- ChatGPT icon -->
+            </div>
+            <div class="icon" title="Change Background" onclick="alert('Drop an image on the icon to change the background!')">
+                <img src="https://img.icons8.com/ios-filled/24/ffffff/picture.png" alt="Change Background Icon" />
+            </div>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)" />
         </div>
         <div class="main-content">
-            <iframe src="https://snoopthethird.oops.wtf"></iframe>
+            <iframe src="" title="Content Frame"></iframe> <!-- Main content area -->
         </div>
-        <script>
-            // Self-replicating script to display this HTML content
-            document.documentElement.innerHTML = \`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=yes">
-                <title>${title}</title> <!-- Random title for iframe content -->
-                <link rel="shortcut icon" href="${icon}" type="image/x-icon"> <!-- Random icon for iframe -->
-                <link href="https://legitmathreal.web.app/styles.css" rel="stylesheet" type="text/css" />
-                <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"><\\/script>
-                <style>
-                    /* Set the background image in self-replicated content */
-                    body {
-                        background-image: url('https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462560324_533263362654902_229266993414360698_n.png?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=QuvfOIBUt0sQ7kNvgEmF4l2&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AMFR2Q0vvPRCXpybOGClt0k&oh=03_Q7cD1QHz_xHbaNAK6R5wmjOEgZkQZaynPIE38Ps-O2S6KmZxkQ&oe=673E5D28');
-                        background-size: cover; /* Make the background cover the whole page */
-                        background-repeat: no-repeat; /* Prevent the background from repeating */
-                        background-position: center; /* Center the background image */
-                        margin: 0; /* Remove default margin */
-                        height: 100vh; /* Full viewport height */
-                        overflow: hidden; /* Prevent scrolling */
-                        display: flex; /* Use flexbox for layout */
-                    }
-                    /* Sidebar styles */
-                    .sidebar {
-                        width: 60px; /* Set a fixed width for the sidebar */
-                        background: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
-                        display: flex;
-                        flex-direction: column; /* Vertical layout */
-                        align-items: center; /* Center items */
-                        padding: 10px 0; /* Vertical padding */
-                    }
-                    .sidebar .icon {
-                        cursor: pointer; /* Change cursor on hover */
-                        margin: 10px 0; /* Spacing between icons */
-                        transition: background 0.3s; /* Smooth background transition */
-                        padding: 10px; /* Padding for icons */
-                        border-radius: 5px; /* Rounded corners */
-                        display: flex; /* Flexbox for alignment */
-                        justify-content: center; /* Center icon horizontally */
-                        align-items: center; /* Center icon vertically */
-                        width: 40px; /* Width for the icon */
-                        height: 40px; /* Height for the icon */
-                    }
-                    .sidebar .icon:hover {
-                        background: rgba(255, 255, 255, 0.2); /* Change background on hover */
-                    }
-                    /* Main content area */
-                    .main-content {
-                        flex: 1; /* Fill remaining space */
-                        display: flex; /* Use flexbox for the iframe */
-                        justify-content: center; /* Center the iframe */
-                        align-items: center; /* Center the iframe vertically */
-                    }
-                    /* Make the iframe fill the screen */
-                    iframe {
-                        width: 100%; /* Fill the full width */
-                        height: 100%; /* Fill the full height */
-                        border: none; /* Remove the default border */
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="sidebar">
-                    <div class="icon" title="Copy YouTube Unblocker Code" onclick="copyToClipboard()">
-                        <img src="https://img.icons8.com/material-outlined/24/ffffff/youtube-play.png" alt="Copy Code Icon" /> <!-- YouTube unblocker icon -->
-                    </div>
-                </div>
-                <div class="main-content">
-                    <iframe src="https://snoopthethird.oops.wtf"></iframe>
-                </div>
-                <script>
-                    \${document.currentScript.outerHTML}
-                <\\/script>
-            </body>
-            </html>\`;
-        </script>
     </body>
     </html>
     `;
-}).catch(error => {
-    console.error("Failed to fetch titles and icons:", error);
 });
