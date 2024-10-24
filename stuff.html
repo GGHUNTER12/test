@@ -1,43 +1,56 @@
 // Clear all elements on the page first 
 document.documentElement.innerHTML = "";
 
-// URL of the HTML page that contains the list of titles and icons
-const titlesPageUrl = "https://gghunter12.github.io/test/titles.html"; // Replace with your actual URL
-
-// Function to fetch titles and icons from the specified URL
-async function fetchTitlesAndIcons() {
-    const response = await fetch(titlesPageUrl);
-    const text = await response.text();
-
-    // Create a new DOM parser
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, 'text/html');
-
-    // Get titles and icons from list items
-    const items = Array.from(doc.querySelectorAll('ul#title-list li'));
-    const titlesAndIcons = items.map(li => ({
-        title: li.getAttribute('data-title'),
-        icon: li.getAttribute('data-icon'),
-    }));
-
-    // Return the array of titles and icons
-    return titlesAndIcons;
+// Function to set a cookie
+function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/`;
 }
 
-// Function to pick a random title and icon
-function getRandomTitleAndIcon(titlesAndIcons) {
-    const randomIndex = Math.floor(Math.random() * titlesAndIcons.length);
-    return titlesAndIcons[randomIndex];
+// Function to get a cookie value
+function getCookie(name) {
+    return document.cookie.split('; ').reduce((r, v) => {
+        const parts = v.split('=');
+        return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+    }, '');
 }
 
-// Copy the specified code to clipboard
-function copyToClipboard() {
-    const codeToCopy = `void fetch('https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/youtube.html').then(d => d.text()).then(eval);`;
-    navigator.clipboard.writeText(codeToCopy).then(() => {
-        alert("YouTube unblocker code has been copied to your clipboard! 🎥");
-    }).catch(err => {
-        console.error("Failed to copy text: ", err);
-    });
+// Store password in a variable
+let storedPassword = getCookie('cheatPassword') || "";
+
+// Function to set a password
+function setPassword() {
+    const password = prompt("Create a password to protect the cheat codes:");
+    if (password) {
+        storedPassword = password;
+        setCookie('cheatPassword', password, 30); // Store the password in a cookie for 30 days
+        alert("Password has been set. Remember it!");
+    }
+}
+
+// Function to prompt for password and verify it
+function verifyPassword() {
+    if (!storedPassword) {
+        setPassword();
+    }
+    const password = prompt("Enter your password to use the cheat code:");
+    if (password === storedPassword) {
+        return true; // Password is correct
+    } else {
+        alert("Incorrect password! Access denied.");
+        return false; // Password is incorrect
+    }
+}
+
+// Function to copy code to clipboard and show an alert
+function copyToClipboard(code, message) {
+    if (verifyPassword()) { // Only proceed if password is correct
+        navigator.clipboard.writeText(code).then(() => {
+            alert(message);
+        }).catch(err => {
+            console.error("Failed to copy text: ", err);
+        });
+    }
 }
 
 // Change the background by dropping an image
@@ -66,101 +79,94 @@ document.addEventListener('dragenter', preventDefaults, false);
 document.addEventListener('dragover', preventDefaults, false);
 document.addEventListener('drop', handleFileDrop, false);
 
-// Fetch titles and icons and set the HTML content
-fetchTitlesAndIcons().then(titlesAndIcons => {
-    // Check if titles were fetched
-    if (titlesAndIcons.length === 0) {
-        console.error("No titles found!");
-        return;
-    }
+// Log message to the console
+console.log('%cBROWSER 69 VERSION LOADED', 'font-size: 30px; color: green; font-weight: bold; text-shadow: 2px 2px 5px black;');
 
-    const { title, icon } = getRandomTitleAndIcon(titlesAndIcons);
-
-    // Set new HTML content
-    document.documentElement.innerHTML = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=yes">
-        <title>${title}</title> <!-- Random title set here -->
-        <link rel="shortcut icon" href="${icon}" type="image/x-icon"> <!-- Random icon set here -->
-        <link href="https://legitmathreal.web.app/styles.css" rel="stylesheet" type="text/css" />
-        <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"></script>
-        <style>
-            /* Set the background image */
-            body {
-                background-image: url('https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462560324_533263362654902_229266993414360698_n.png?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=QuvfOIBUt0sQ7kNvgEmF4l2&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AMFR2Q0vvPRCXpybOGClt0k&oh=03_Q7cD1QHz_xHbaNAK6R5wmjOEgZkQZaynPIE38Ps-O2S6KmZxkQ&oe=673E5D28');
-                background-size: cover; /* Make the background cover the whole page */
-                background-repeat: no-repeat; /* Prevent the background from repeating */
-                background-position: center; /* Center the background image */
-                margin: 0; /* Remove default margin */
-                height: 100vh; /* Full viewport height */
-                overflow: hidden; /* Prevent scrolling */
-                display: flex; /* Use flexbox for layout */
-            }
-            /* Sidebar styles */
-            .sidebar {
-                width: 60px; /* Set a fixed width for the sidebar */
-                background: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
-                display: flex;
-                flex-direction: column; /* Vertical layout */
-                align-items: center; /* Center items */
-                padding: 10px 0; /* Vertical padding */
-            }
-            .sidebar .icon {
-                cursor: pointer; /* Change cursor on hover */
-                margin: 10px 0; /* Spacing between icons */
-                transition: background 0.3s; /* Smooth background transition */
-                padding: 10px; /* Padding for icons */
-                border-radius: 5px; /* Rounded corners */
-                display: flex; /* Flexbox for alignment */
-                justify-content: center; /* Center icon horizontally */
-                align-items: center; /* Center icon vertically */
-                width: 40px; /* Width for the icon */
-                height: 40px; /* Height for the icon */
-            }
-            .sidebar .icon:hover {
-                background: rgba(255, 255, 255, 0.2); /* Change background on hover */
-            }
-            /* Main content area */
-            .main-content {
-                flex: 1; /* Fill remaining space */
-                display: flex; /* Use flexbox for the iframe */
-                justify-content: center; /* Center the iframe */
-                align-items: center; /* Center the iframe vertically */
-            }
-            /* Make the iframe fill the screen */
-            iframe {
-                width: 100%; /* Fill the full width */
-                height: 100%; /* Fill the full height */
-                border: none; /* Remove the default border */
-            }
-        </style>
-    </head>
-    <body>
-        <div class="sidebar">
-            <div class="icon" title="Logo">
-                <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/462567906_1264779828100561_3681124885906587443_n.png?_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=TdfxAyM_1xcQ7kNvgFY7E4Q&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&_nc_gid=A5JTSEpNcg82oAZJlvE699d&oh=03_Q7cD1QHMTzn_yHYAneIMzOx3Y-QZfK9Vr41vLupgA02YaQbH4A&oe=673FC5AB" alt="Top Icon" style="width: 40px; height: 40px;" />
-            </div>
-            <div class="icon" title="Home" onclick="document.querySelector('iframe').src='https://snoopthethird.oops.wtf'">
-                <img src="https://img.icons8.com/material-outlined/24/ffffff/home.png" alt="Home Icon" /> <!-- Home icon -->
-            </div>
-            <div class="icon" title="YouTube Unblocker" onclick="document.querySelector('iframe').src='https://yt5s.is/en/youtube-to-mp4/'">
-                <img src="https://img.icons8.com/material-outlined/24/ffffff/youtube-play.png" alt="YouTube Unblocker Icon" /> <!-- YouTube unblocker icon -->
-            </div>
-            <div class="icon" title="ChatGPT" onclick="document.querySelector('iframe').src='https://gptcall.net/chat.html?data=%7B%22contact%22%3A%7B%22id%22%3A%22mQzEosdaqlUftU-PtKSEC%22%2C%22flow%22%3Atrue%7D%7D'">
-                <img src="https://img.icons8.com/material-outlined/24/ffffff/chat.png" alt="ChatGPT Icon" /> <!-- ChatGPT icon -->
-            </div>
-            <div class="icon" title="Change Background" onclick="alert('Drop an image on the icon to change the background!')">
-                <img src="https://img.icons8.com/ios-filled/24/ffffff/picture.png" alt="Change Background Icon" />
-            </div>
-            <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)" />
+// Set the new HTML content
+document.documentElement.innerHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=yes">
+    <title>Sidebar with Cheats</title>
+    <link href="https://legitmathreal.web.app/styles.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.2/lib/p5.js"></script>
+    <style>
+        /* Set the background image */
+        body {
+            background-image: url('https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462560324_533263362654902_229266993414360698_n.png?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=QuvfOIBUt0sQ7kNvgEmF4l2&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AMFR2Q0vvPRCXpybOGClt0k&oh=03_Q7cD1QHz_xHbaNAK6R5wmjOEgZkQZaynPIE38Ps-O2S6KmZxkQ&oe=673E5D28');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+        .sidebar {
+            width: 60px;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .sidebar .icon {
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background 0.3s;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+        }
+        .sidebar .icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="icon" title="Logo">
+            <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/462567906_1264779828100561_3681124885906587443_n.png?_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=TdfxAyM_1xcQ7kNvgFY7E4Q&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&_nc_gid=A5JTSEpNcg82oAZJlvE699d&oh=03_Q7cD1QHMTzn_yHYAneIMzOx3Y-QZfK9Vr41vLupgA02YaQbH4A&oe=673FC5AB" alt="Top Icon" style="width: 60px; height: 60px;" />
         </div>
-        <div class="main-content">
-            <iframe src="" title="Content Frame"></iframe> <!-- Main content area -->
+        <div class="icon" title="Home" onclick="document.querySelector('iframe').src='https://snoopthethird.oops.wtf'">
+            <img src="https://img.icons8.com/material-outlined/24/ffffff/home.png" alt="Home Icon" />
         </div>
-    </body>
-    </html>
-    `;
-});
+        <div class="icon" title="YouTube Unblocker" onclick="document.querySelector('iframe').src='https://yt5s.is/en/youtube-to-mp4/'">
+            <img src="https://img.icons8.com/material-outlined/24/ffffff/youtube-play.png" alt="YouTube Unblocker Icon" />
+        </div>
+        <div class="icon" title="ChatGPT" onclick="document.querySelector('iframe').src='https://gptcall.net/chat.html?data=%7B%22contact%22%3A%7B%22id%22%3A%22mQzEosdaqlUftU-PtKSEC%22%2C%22flow%22%3Atrue%7D%7D'">
+            <img src="https://img.icons8.com/material-outlined/24/ffffff/chat.png" alt="ChatGPT Icon" />
+        </div>
+        <div class="icon" title="Gimkit Cheat" onclick="copyToClipboard(\`void fetch('https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/refs/heads/main/build/bundle.js').then(d => d.text()).then(eval);\`, 'Gimkit cheat code has been copied to your clipboard!')">
+            <img src="https://i0.wp.com/www.cristic.com/wp-content/uploads/2023/06/cristic-herramientas-tic-educativas-profesores-evaluacion-gimkit.png?fit=300%2C300&ssl=1" alt="Gimkit Cheat Icon" style="width: 40px; height: 40px;" />
+        </div>
+        <div class="icon" title="Blooket Cheat GUI" onclick="copyToClipboard(\`void fetch('https://raw.githubusercontent.com/swagging-post/Blooket-Cheat-GUI-aka-Swaggers-GUI/refs/heads/main/cheats/gui/gui.js').then(d => d.text()).then(eval);\`, 'Blooket cheat GUI code has been copied to your clipboard!')">
+            <img src="https://lh3.googleusercontent.com/azNs270N9hxpORUhhBT8RPlcmPvQL-HmZg7sEd7RRxR4ecVP6leo650s8ocwtUOCPEs41ALG4pPREzjNp068Yas=w1280" alt="Blooket Cheat Icon" style="width: 40px; height: 40px;" />
+        </div>
+        <div class="icon" title="Change Background" onclick="alert('Drop an image on this icon to change the background.');">
+            <img src="https://img.icons8.com/material-outlined/24/ffffff/image.png" alt="Change Background Icon" />
+        </div>
+    </div>
+    <div class="main-content">
+        <iframe src="https://snoopthethird.oops.wtf"></iframe>
+    </div>
+</body>
+</html>
+`;
