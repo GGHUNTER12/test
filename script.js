@@ -27,39 +27,84 @@ function getRandomTitleAndIcon(titlesAndIcons) {
     return titlesAndIcons[randomIndex];
 }
 
-// Function to change the iframe source and draw it on canvas
-function changeIframeSource(url) {
-    const iframe = document.createElement('iframe');
-    iframe.src = url;
-    iframe.onload = () => {
-        drawIframeToCanvas(iframe);
-    };
-    document.body.appendChild(iframe);
-}
-
-// Function to draw the iframe content onto a canvas
-function drawIframeToCanvas(iframe) {
-    const canvas = document.getElementById('contentCanvas');
-    const context = canvas.getContext('2d');
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-    const iframeContent = iframeDoc.documentElement;
-
-    // Draw the iframe content onto the canvas
-    html2canvas(iframeContent).then((canvas) => {
-        context.drawImage(canvas, 0, 0, canvas.width, canvas.height);
-    });
-
-    // Remove the iframe from the document after drawing
-    iframe.remove();
-}
-
-// Disable right-click and keyboard shortcuts for inspection tools
-document.addEventListener('contextmenu', (e) => e.preventDefault());
-document.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && (e.key === 'u' || e.key === 'i' || e.key === 'j' || e.key === 's')) {
-        e.preventDefault();
+// Copy the specified cheat code to clipboard after password verification
+window.copyCheatCode = function(url, message) {
+    const password = getPassword();
+    if (password) {
+        const userPassword = prompt("Enter your password:");
+        if (userPassword === password) {
+            fetch(url)
+                .then(response => response.text())
+                .then(code => {
+                    navigator.clipboard.writeText(code).then(() => {
+                        alert(${message} has been copied to your clipboard!);
+                    });
+                })
+                .catch(err => {
+                    console.error("Failed to fetch and copy cheat code: ", err);
+                    alert("Failed to copy cheat code.");
+                });
+        } else {
+            alert("Incorrect password. The code was not copied.");
+        }
     }
-});
+};
+
+// Get or create the password and store it in a cookie
+function getPassword() {
+    let password = getCookie('cheatPassword');
+    if (!password) {
+        password = prompt("Create a password to use for copying cheat codes:");
+        document.cookie = cheatPassword=${password}; max-age=31536000; path=/; // 1 year
+    }
+    return password;
+}
+
+// Function to get the value of a cookie by name
+function getCookie(name) {
+    const value = ; ${document.cookie};
+    const parts = value.split(; ${name}=);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+// Update the page title and icon
+async function updatePageTitleAndIcon() {
+    const titlesAndIcons = await fetchTitlesAndIcons();
+    const { title, icon } = getRandomTitleAndIcon(titlesAndIcons);
+    document.getElementById('pageTitle').textContent = title;
+    document.getElementById('pageIcon').href = icon;
+}
+
+// Function to change the background image
+function changeBackgroundImage(imageUrl) {
+    document.body.style.backgroundImage = url(${imageUrl});
+}
+
+// Drag and drop functionality for changing background
+function handleDrop(event) {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            changeBackgroundImage(e.target.result);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert("Please drop an image file.");
+    }
+}
+
+// Prevent default drag behaviors
+function handleDragOver(event) {
+    event.preventDefault();
+}
+
+// Add event listeners to the background changer icon
+const backgroundChangerIcon = document.getElementById('backgroundChanger');
+backgroundChangerIcon.addEventListener('dragover', handleDragOver);
+backgroundChangerIcon.addEventListener('drop', handleDrop);
 
 // Update the page title and icon on load
 updatePageTitleAndIcon();
