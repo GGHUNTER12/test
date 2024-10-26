@@ -14,7 +14,7 @@ async function fetchTitlesAndIcons() {
     const items = Array.from(doc.querySelectorAll('ul#title-list li'));
     const titlesAndIcons = items.map(li => ({
         title: li.getAttribute('data-title'),
-        icon: li.getAttribute('data-icon'),
+        icon: li.getAttribute('data-icon')
     }));
 
     // Return the array of titles and icons
@@ -92,7 +92,7 @@ backgroundChanger.addEventListener('drop', (event) => {
         const reader = new FileReader();
         reader.onload = function(e) {
             document.body.style.backgroundImage = `url(${e.target.result})`;
-        }
+        };
         reader.readAsDataURL(file);
     }
 });
