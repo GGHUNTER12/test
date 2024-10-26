@@ -28,7 +28,7 @@ function getRandomTitleAndIcon(titlesAndIcons) {
 }
 
 // Copy the specified cheat code to clipboard after password verification
-function copyCheatCode(url, message) {
+window.copyCheatCode = function(url, message) {
     const password = getPassword();
     if (password) {
         const userPassword = prompt("Enter your password:");
@@ -48,17 +48,14 @@ function copyCheatCode(url, message) {
             alert("Incorrect password. The code was not copied.");
         }
     }
-}
+};
 
 // Get or create the password and store it in a cookie
 function getPassword() {
-    let password = getCookie("password");
+    let password = getCookie('cheatPassword');
     if (!password) {
-        password = prompt("Create a new password:");
-        if (password) {
-            document.cookie = `password=${password}; max-age=31536000; path=/;`;
-            alert("Password created successfully.");
-        }
+        password = prompt("Create a password to use for copying cheat codes:");
+        document.cookie = `cheatPassword=${password}; max-age=31536000; path=/`; // 1 year
     }
     return password;
 }
