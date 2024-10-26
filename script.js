@@ -75,5 +75,36 @@ async function updatePageTitleAndIcon() {
     document.getElementById('pageIcon').href = icon;
 }
 
+// Function to change the background image
+function changeBackgroundImage(imageUrl) {
+    document.body.style.backgroundImage = `url(${imageUrl})`;
+}
+
+// Drag and drop functionality for changing background
+function handleDrop(event) {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            changeBackgroundImage(e.target.result);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert("Please drop an image file.");
+    }
+}
+
+// Prevent default drag behaviors
+function handleDragOver(event) {
+    event.preventDefault();
+}
+
+// Add event listeners to the background changer icon
+const backgroundChangerIcon = document.getElementById('backgroundChanger');
+backgroundChangerIcon.addEventListener('dragover', handleDragOver);
+backgroundChangerIcon.addEventListener('drop', handleDrop);
+
 // Update the page title and icon on load
 updatePageTitleAndIcon();
