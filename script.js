@@ -27,26 +27,27 @@ function getRandomTitleAndIcon(titlesAndIcons) {
     return titlesAndIcons[randomIndex];
 }
 
-// Copy the specified code to clipboard
-function copyToClipboard(url, message) {
-    fetch(url)
-        .then(response => response.text())
-        .then(code => {
-            const password = getPassword();
-            if (password) {
-                const userPassword = prompt("Enter your password:");
-                if (userPassword === password) {
+// Copy the specified cheat code to clipboard after password verification
+function copyCheatCode(url, message) {
+    const password = getPassword();
+    if (password) {
+        const userPassword = prompt("Enter your password:");
+        if (userPassword === password) {
+            fetch(url)
+                .then(response => response.text())
+                .then(code => {
                     navigator.clipboard.writeText(code).then(() => {
                         alert(`${message} has been copied to your clipboard!`);
                     });
-                } else {
-                    alert("Incorrect password. The code was not copied.");
-                }
-            }
-        })
-        .catch(err => {
-            console.error("Failed to copy text: ", err);
-        });
+                })
+                .catch(err => {
+                    console.error("Failed to fetch and copy cheat code: ", err);
+                    alert("Failed to copy cheat code.");
+                });
+        } else {
+            alert("Incorrect password. The code was not copied.");
+        }
+    }
 }
 
 // Get or create the password and store it in a cookie
@@ -62,7 +63,7 @@ function getPassword() {
     return password;
 }
 
-// Retrieve a specific cookie by name
+// Function to get the value of a cookie by name
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
