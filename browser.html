@@ -1,0 +1,209 @@
+// URL of the HTML page that contains the list of titles and icons
+const titlesPageUrl = "https://gghunter12.github.io/test/titles.html"; // Replace with your actual URL
+
+// Function to fetch titles and icons from the specified URL
+async function fetchTitlesAndIcons() {
+    const response = await fetch(titlesPageUrl);
+    const text = await response.text();
+
+    // Create a new DOM parser
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, 'text/html');
+
+    // Get titles and icons from list items
+    const items = Array.from(doc.querySelectorAll('ul#title-list li'));
+    const titlesAndIcons = items.map(li => ({
+        title: li.getAttribute('data-title'),
+        icon: li.getAttribute('data-icon'),
+    }));
+
+    // Return the array of titles and icons
+    return titlesAndIcons;
+}
+
+// Function to pick a random title and icon
+function getRandomTitleAndIcon(titlesAndIcons) {
+    const randomIndex = Math.floor(Math.random() * titlesAndIcons.length);
+    return titlesAndIcons[randomIndex];
+}
+
+// Copy the specified code to clipboard
+function copyToClipboard(url, message) {
+    fetch(url)
+        .then(response => response.text())
+        .then(code => {
+            const password = getPassword();
+            if (password) {
+                const userPassword = prompt("Enter your password:");
+                if (userPassword === password) {
+                    navigator.clipboard.writeText(code).then(() => {
+                        alert(${message} has been copied to your clipboard!);
+                    });
+                } else {
+                    alert("Incorrect password. The code was not copied.");
+                }
+            }
+        })
+        .catch(err => {
+            console.error("Failed to copy text: ", err);
+        });
+}
+
+// Get or create the password and store it in a cookie
+function getPassword() {
+    let password = getCookie("password");
+    if (!password) {
+        password = prompt("Create a new password:");
+        if (password) {
+            document.cookie = password=${password}; max-age=31536000; path=/;;
+            alert("Password created successfully.");
+        }
+    }
+    return password;
+}
+
+// Retrieve a specific cookie by name
+function getCookie(name) {
+    const value = ; ${document.cookie};
+    const parts = value.split(; ${name}=);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+
+// Change the background by dropping an image
+function handleFileDrop(event) {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.body.style.backgroundImage = url('${e.target.result}');
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert("Please drop a valid image file.");
+    }
+}
+
+// Prevent default behavior for drag and drop
+function preventDefaults(event) {
+    event.preventDefault();
+    event.stopPropagation();
+}
+
+// Add event listeners for drag and drop functionality
+document.addEventListener('dragenter', preventDefaults, false);
+document.addEventListener('dragover', preventDefaults, false);
+document.addEventListener('drop', handleFileDrop, false);
+
+// Log the console message
+console.log("%cBROWSER 69 VERSION LOADED", "font-size: 24px; color: green;");
+
+// Function to handle key press events
+function handleKeyPress(event) {
+    if (event.key === 's' || event.key === 'S') {
+        // Reload the current page
+        location.reload();
+        // Open a new tab and redirect to a Chrome new tab
+        window.open('chrome://newtab', '_blank');
+    }
+}
+
+// Add event listener for key presses
+document.addEventListener('keydown', handleKeyPress);
+
+// Alert for pressing 'S' key
+alert('PRESS KEYBOARD LETTER "S" TO RELOAD THE PAGE (SUCCESSFULLY LOADED SECURED BROWSER)');
+
+// Fetch titles and icons and set the HTML content
+fetchTitlesAndIcons().then(titlesAndIcons => {
+    // Check if titles were fetched
+    if (titlesAndIcons.length === 0) {
+        console.error("No titles found!");
+        return;
+    }
+
+    const { title, icon } = getRandomTitleAndIcon(titlesAndIcons);
+
+    // Set new HTML content
+    document.documentElement.innerHTML = 
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=yes">
+        <title>${title}</title>
+        <link rel="shortcut icon" href="${icon}" type="image/x-icon">
+        <style>
+            body {
+                background-image: url('https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462560324_533263362654902_229266993414360698_n.png?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=QuvfOIBUt0sQ7kNvgEmF4l2&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AMFR2Q0vvPRCXpybOGClt0k&oh=03_Q7cD1QHz_xHbaNAK6R5wmjOEgZkQZaynPIE38Ps-O2S6KmZxkQ&oe=673E5D28');
+                background-size: cover;
+                margin: 0;
+                height: 100vh;
+                display: flex;
+            }
+            .sidebar {
+                width: 60px;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px 0;
+            }
+            .sidebar .icon {
+                cursor: pointer;
+                margin: 10px 0;
+                transition: background 0.3s;
+                padding: 10px;
+                border-radius: 5px;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .sidebar .icon:hover {
+                background: rgba(255, 255, 255, 0.2);
+            }
+            .main-content {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="sidebar">
+            <div class="icon" title="Logo">
+                <img src="https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462567906_1264779828100561_3681124885906587443_n.png?_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=z0UnNqgDXLYQ7kNvgEntTM2&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=Arzj41rtNevZScWv3DZYFBn&oh=03_Q7cD1QQEAt1gTSDS-IO3F7m5WDOLk1MzzvPvNkrwlJDBYUy0lxQ&oe=674268AB" alt="Top Icon" style="width: 60px; height: 60px;" />
+            </div>
+            <div class="icon" title="Home" onclick="document.querySelector('iframe').src='https://snoopthethird.oops.wtf'">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/home.png" alt="Home Icon" />
+            </div>
+            <div class="icon" title="YouTube Unblocker" onclick="document.querySelector('iframe').src='https://yt5s.is/en/youtube-to-mp4/'">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/youtube-play.png" alt="YouTube Unblocker Icon" />
+            </div>
+            <div class="icon" title="Gimkit Cheat" onclick="copyToClipboard('https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/refs/heads/main/build/bundle.js', 'Gimkit cheat code')">
+                <img src="https://i0.wp.com/www.cristic.com/wp-content/uploads/2023/06/cristic-herramientas-tic-educativas-profesores-evaluacion-gimkit.png?fit=300%2C300&ssl=1" alt="Gimkit Cheat Icon" style="width: 40px; height: 40px;" />
+            </div>
+            <div class="icon" title="Blooket Cheat" onclick="copyToClipboard('https://raw.githubusercontent.com/swagging-post/Blooket-Cheat-GUI-aka-Swaggers-GUI/refs/heads/main/cheats/gui/gui.js', 'Blooket cheat GUI')">
+                <img src="https://scontent.xx.fbcdn.net/v/t1.15752-9/462581495_543401301734437_1231897857323848799_n.png?_nc_cat=104&ccb=1-7&_nc_sid=0024fc&_nc_ohc=zCMwdzbeGWAQ7kNvgHfcoZN&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&_nc_gid=Ar1TxxyrbGNai31h0CbOt_q&oh=03_Q7cD1QF1cFCo0S7Lz2ZZDlskujAd0Z-i5UePjAZrTH7NKDVdwA&oe=67426B3F" alt="Blooket Cheat Icon" style="width: 30px; height: 30px;" />
+            </div>
+            <div class="icon" title="ChatGPT" onclick="document.querySelector('iframe').src='https://gptcall.net/chat.html?data=%7B%22contact%22%3A%7B%22id%22%3A%22mQzEosdaqlUftU-PtKSEC%22%2C%22flow%22%3Atrue%7D%7D'">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/chat.png" alt="ChatGPT Icon" />
+            </div>
+            <div class="icon" title="Change Background" onclick="alert('Drop an Image on the Icon to Change the Background')">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/image.png" alt="Background Icon" />
+            </div>
+        </div>
+        <div class="main-content">
+            <iframe src="https://snoopthethird.oops.wtf" title="Content Frame"></iframe>
+        </div>
+    </body>
+    </html>
