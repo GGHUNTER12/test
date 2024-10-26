@@ -60,26 +60,42 @@ function getPassword() {
     return password;
 }
 
-// Function to get the value of a cookie by name
+// Function to get a cookie by name
 function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-// Disable right-click, F12, and some key combinations to make inspection harder
-document.addEventListener('contextmenu', event => event.preventDefault());
-document.addEventListener('keydown', event => {
-    if (event.key === 'F12' || 
-        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'C' || event.key === 'J')) || 
-        (event.ctrlKey && event.key === 'U')) {
-        event.preventDefault();
+// Change the page title and icon
+async function updatePageTitleAndIcon() {
+    const titlesAndIcons = await fetchTitlesAndIcons();
+    const { title, icon } = getRandomTitleAndIcon(titlesAndIcons);
+    document.title = title;
+    document.getElementById("pageIcon").href = icon;
+}
+
+// Change the background on drag-and-drop
+const backgroundChanger = document.getElementById('backgroundChanger');
+
+// Prevent default drag behaviors
+backgroundChanger.addEventListener('dragover', (event) => {
+    event.preventDefault(); // This is needed to allow dropping
+});
+
+// Handle the drop event
+backgroundChanger.addEventListener('drop', (event) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.body.style.backgroundImage = `url(${e.target.result})`;
+        }
+        reader.readAsDataURL(file);
     }
 });
 
-// Update the page title and favicon randomly
-fetchTitlesAndIcons().then(titlesAndIcons => {
-    const { title, icon } = getRandomTitleAndIcon(titlesAndIcons);
-    document.getElementById('pageTitle').innerText = title;
-    document.getElementById('pageIcon').href = icon;
-});
+// Load initial title and icon
+updatePageTitleAndIcon();
