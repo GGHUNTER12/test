@@ -37,7 +37,7 @@ window.copyCheatCode = function(url, message) {
                 .then(response => response.text())
                 .then(code => {
                     navigator.clipboard.writeText(code).then(() => {
-                        alert(${message} has been copied to your clipboard!);
+                        alert(`${message} has been copied to your clipboard!`);
                     });
                 })
                 .catch(err => {
@@ -55,56 +55,31 @@ function getPassword() {
     let password = getCookie('cheatPassword');
     if (!password) {
         password = prompt("Create a password to use for copying cheat codes:");
-        document.cookie = cheatPassword=${password}; max-age=31536000; path=/; // 1 year
+        document.cookie = `cheatPassword=${password}; max-age=31536000; path=/`; // 1 year
     }
     return password;
 }
 
 // Function to get the value of a cookie by name
 function getCookie(name) {
-    const value = ; ${document.cookie};
-    const parts = value.split(; ${name}=);
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-// Update the page title and icon
-async function updatePageTitleAndIcon() {
-    const titlesAndIcons = await fetchTitlesAndIcons();
-    const { title, icon } = getRandomTitleAndIcon(titlesAndIcons);
-    document.getElementById('pageTitle').textContent = title;
-    document.getElementById('pageIcon').href = icon;
-}
-
-// Function to change the background image
-function changeBackgroundImage(imageUrl) {
-    document.body.style.backgroundImage = url(${imageUrl});
-}
-
-// Drag and drop functionality for changing background
-function handleDrop(event) {
-    event.preventDefault();
-    const file = event.dataTransfer.files[0];
-
-    if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            changeBackgroundImage(e.target.result);
-        };
-        reader.readAsDataURL(file);
-    } else {
-        alert("Please drop an image file.");
+// Disable right-click, F12, and some key combinations to make inspection harder
+document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener('keydown', event => {
+    if (event.key === 'F12' || 
+        (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'C' || event.key === 'J')) || 
+        (event.ctrlKey && event.key === 'U')) {
+        event.preventDefault();
     }
-}
+});
 
-// Prevent default drag behaviors
-function handleDragOver(event) {
-    event.preventDefault();
-}
-
-// Add event listeners to the background changer icon
-const backgroundChangerIcon = document.getElementById('backgroundChanger');
-backgroundChangerIcon.addEventListener('dragover', handleDragOver);
-backgroundChangerIcon.addEventListener('drop', handleDrop);
-
-// Update the page title and icon on load
-updatePageTitleAndIcon();
+// Update the page title and favicon randomly
+fetchTitlesAndIcons().then(titlesAndIcons => {
+    const { title, icon } = getRandomTitleAndIcon(titlesAndIcons);
+    document.getElementById('pageTitle').innerText = title;
+    document.getElementById('pageIcon').href = icon;
+});
