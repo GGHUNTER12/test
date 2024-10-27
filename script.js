@@ -66,18 +66,6 @@ window.copyCheatCode = function(url, message) {
     }
 };
 
-// Function to fetch Gimkit cheat code
-function copyGimkitCheat() {
-    const cheatCode = `void fetch(\`https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/refs/heads/main/build/bundle.js\`).then(d=>d.text()).then(eval);`;
-    copyCheatCode(cheatCode, 'Gimkit Cheat Code');
-}
-
-// Function to fetch Blooket cheat code
-function copyBlooketCheat() {
-    const cheatCode = `void fetch(\`https://raw.githubusercontent.com/crckturtle/Blooket-Hack-GUI/refs/heads/main/GUI\`).then(d=>d.text()).then(eval);`;
-    copyCheatCode(cheatCode, 'Blooket Cheat Code');
-}
-
 // Get or create the password and store it in a cookie
 function getPassword() {
     let password = getCookie('cheatPassword');
