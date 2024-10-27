@@ -83,9 +83,27 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-// Declare cheat code variables
+// Define cheat code variables
 const gimkitCode = `void fetch('https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.js').then(d => d.text()).then(eval);`;
 const blooketCode = `void fetch('https://raw.githubusercontent.com/crckturtle/Blooket-Hack-GUI/main/GUI').then(d => d.text()).then(eval);`;
+
+// Function to copy the code to clipboard
+function copyCheatCode(code, title) {
+    // Check if the document is focused
+    if (document.hasFocus()) {
+        // Use the Clipboard API to copy text
+        navigator.clipboard.writeText(code)
+            .then(() => {
+                alert(`${title} copied to clipboard!`);
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+    } else {
+        alert('Document not focused. Please try again.');
+    }
+}
+
 
 // Update the page title and icon
 async function updatePageTitleAndIcon() {
