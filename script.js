@@ -83,6 +83,10 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
+// Declare cheat code variables
+const gimkitCode = `void fetch('https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/main/build/bundle.js').then(d => d.text()).then(eval);`;
+const blooketCode = `void fetch('https://raw.githubusercontent.com/crckturtle/Blooket-Hack-GUI/main/GUI').then(d => d.text()).then(eval);`;
+
 // Update the page title and icon
 async function updatePageTitleAndIcon() {
     const titlesAndIcons = await fetchTitlesAndIcons();
