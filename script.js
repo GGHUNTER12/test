@@ -24,6 +24,8 @@ window.copyCheatCode = function(url, message) {
     if (password) {
         const userPassword = prompt("Enter your password:");
         if (userPassword === password) {
+            // Focus the window before attempting to write to the clipboard
+            window.focus();
             fetch(url)
                 .then(response => response.text())
                 .then(code => {
