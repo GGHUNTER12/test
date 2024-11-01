@@ -12,6 +12,7 @@
             margin: 0;
             height: 100vh;
             display: flex;
+            position: relative; /* Added for positioning the floating box */
         }
         .sidebar {
             width: 60px;
@@ -47,6 +48,34 @@
             height: 100%;
             border: none;
         }
+        /* Floating box styling */
+        .fullscreen-button-box {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10; /* Higher z-index for floating box */
+            display: flex;
+            align-items: center;
+        }
+        .fullscreen-button {
+            background-color: #1a1a2e; /* New color for the icon button */
+            color: white; /* White icon */
+            border: none; /* No border */
+            padding: 10px; /* Some padding */
+            cursor: pointer; /* Pointer cursor on hover */
+            border-radius: 5px; /* Rounded corners */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .fullscreen-button img {
+            width: 20px; /* Size of the icon */
+            height: 20px; /* Size of the icon */
+        }
     </style>
 </head>
 <body>
@@ -60,7 +89,6 @@
         <div class="icon" title="YouTube Unblocker" onclick="document.querySelector('iframe').src='https://piped.kavin.rocks/trending'">
             <img src="https://img.icons8.com/material-outlined/24/ffffff/youtube-play.png" alt="YouTube Unblocker Icon" />
         </div>
-                <!-- its just a iframe of a website idk how to host a game or proxy to my infomation -->
         <div class="icon" title="Game" onclick="document.querySelector('iframe').src='https://play.szvy.win/pages/gxmez.html'">
             <img src="https://img.icons8.com/material-outlined/24/ffffff/controller.png" alt="Game Icon" />
         </div>
@@ -73,7 +101,6 @@
         <div class="icon" title="Change Background" id="backgroundChanger">
             <img src="https://img.icons8.com/material-outlined/24/ffffff/image.png" alt="Background Icon" />
         </div>
-        <!-- new reload icon buddy -->
         <div class="icon" title="Reload" onclick="reloadIframe()">
             <img src="https://img.icons8.com/material-outlined/24/ffffff/refresh.png" alt="Reload Icon" />
         </div>
@@ -81,13 +108,35 @@
     <div class="main-content">
         <iframe src="https://gghunter12.github.io/test/home.html" title="Content Frame"></iframe>
     </div>
+    
+    <!-- Floating fullscreen button box -->
+    <div class="fullscreen-button-box">
+        <button class="fullscreen-button" id="fullscreenButton">
+            <img src="https://img.icons8.com/material-rounded/24/ffffff/full-screen.png" alt="Fullscreen Icon" />
+        </button>
+    </div>
+
     <script src="script.js"></script>
     <script>
-        // part to reload the iframe
+        // Part to reload the iframe
         function reloadIframe() {
             const iframe = document.querySelector('iframe');
-            iframe.src = iframe.src; // time to rload why are you lookin anyway :\
+            iframe.src = iframe.src; // time to reload
         }
+
+        // Fullscreen functionality
+        document.getElementById('fullscreenButton').onclick = function() {
+            const iframe = document.querySelector('iframe');
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.mozRequestFullScreen) { // Firefox
+                iframe.mozRequestFullScreen();
+            } else if (iframe.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) { // IE/Edge
+                iframe.msRequestFullscreen();
+            }
+        };
     </script>
 </body>
 </html>
