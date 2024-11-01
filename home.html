@@ -128,12 +128,13 @@
         <!-- Smaller Welcome logo inside the box -->
         <img src="https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462571420_1553152448641403_984334477807039531_n.png?_nc_cat=103&ccb=1-7&_nc_sid=9f807c&_nc_ohc=K_UVTzFNGn0Q7kNvgEdt5qB&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AePy4Dv-SBoMfD-ldroYmdn&oh=03_Q7cD1QG0SrSbjiQkD3LGd9bK0MFRDPiHnCCADhBcr_k-YaIzCQ&oe=674C7D30" alt="Welcome Logo" class="welcome-logo">
         <!-- Main secured logo inside the box -->
-        <img src="https://scontent.fsac1-1.fna.fbcdn.net/v/t1.15752-9/462639560_482548034821531_6973457829895561489_n.png?_nc_cat=111&ccb=1-7&_nc_sid=9f807c&_nc_ohc=QPjIzPqBHrwQ7kNvgGpAWQ_&_nc_zt=23&_nc_ht=scontent.fsac1-1.fna&_nc_gid=AePy4Dv-SBoMfD-ldroYmdn&oh=03_Q7cD1QG-t7Ok_8GjVM6JVZIXPGB_ACwrK8VOzSDdElha08KMDw&oe=674C8753"
-        <!-- Version label -->
+        <img src="https://scontent.fsac1-1.fna.fbcdn.net/v/t1.15752-9/462639560_482548034821531_6973457829895561489_n.png?_nc_cat=111&ccb=1-7&_nc_sid=9f807c&_nc_ohc=QPjIzPqBHrwQ7kNvgGpAWQ_&_nc_zt=23&_nc_ht=scontent.fsac1-1.fna&_nc_gid=AePy4Dv-SBoMfD-ldroYmdn&oh=03_Q7cD1QG-t7Ok_8GjVM6JVZIXPGB_ACwrK8VOzSDdElha08KMDw&oe=674C8753" alt="Secured Logo">
         <div class="version">Version 1.0</div>
         
         <!-- Fullscreen button -->
         <button class="fullscreen-button" onclick="openProxy()">Open Proxy</button>
+        <!-- New button to open a different proxy -->
+        <button class="fullscreen-button" onclick="openNewProxy()">Open New Proxy</button>
     </div>
 
     <script>
@@ -171,7 +172,17 @@
             }, 500); // Wait for the fade-out duration
         }
 
-        // Fullscreen function
+        // Open New Proxy function
+        function openNewProxy() {
+            logoContainer.style.transition = 'opacity 0.5s ease'; // Add transition effect
+            logoContainer.style.opacity = '0'; // Fade out the logo container
+            setTimeout(() => {
+                logoContainer.remove(); // Remove the logo container from the DOM after fade out
+                openNewFullscreen(); // Call the function to open the new fullscreen iframe
+            }, 500); // Wait for the fade-out duration
+        }
+
+        // Fullscreen function for original proxy
         function openFullscreen() {
             const iframe = document.createElement('iframe');
             iframe.src = 'https://snoopthethird.oops.wtf';
@@ -184,7 +195,20 @@
             iframe.style.zIndex = '1000';
             document.body.appendChild(iframe);
         }
+
+        // New Fullscreen function for new proxy
+        function openNewFullscreen() {
+            const iframe = document.createElement('iframe');
+            iframe.src = 'https://gghunter12.github.io/test/google.html'; // New URL to open
+            iframe.style.position = 'fixed';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.style.zIndex = '1000';
+            document.body.appendChild(iframe);
+        }
     </script>
 </body>
 </html>
-
