@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Browser</title>
+    <style>
+        /* Basic page setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1a1a2e;
+            font-family: Arial, sans-serif;
+            position: relative;
+            flex-direction: column;
+        }
+
+        /* Particle styles */
+        .particle-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0; /* Behind other content */
+        }
+        .particle {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out, pulse 3s infinite;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Floating animation for particles */
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Pulse effect for particles */
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(128, 0, 128, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(128, 0, 128, 1); }
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 15px; /* Increased padding for a nicer feel */
+            font-size: 18px; /* Slightly larger font size */
+            border: 2px solid #888;
+            border-radius: 25px; /* More pronounced curvature */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            transition: border 0.3s, box-shadow 0.3s; /* Transition for box-shadow */
+            margin-top: 20px; /* Space above the search bar */
+            margin-bottom: 20px; /* Space below the search bar */
+            z-index: 1; /* Above particle container */
+        }
+        input[type="text"]:focus {
+            border-color: #555;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow on focus */
+            outline: none; /* Remove outline */
+        }
+        iframe {
+            width: 80%; /* Full width of the container */
+            height: calc(100vh - 100px); /* Take up remaining height */
+            border: none;
+            border-radius: 20px; /* Curved corners for the iframe */
+            overflow: hidden; /* Prevent content overflow */
+            z-index: 1; /* Above particle container */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="particle-container" id="particles"></div> <!-- Container for particles -->
+    <input type="text" id="searchBar" placeholder="Search or enter URL..." autofocus>
+    <iframe id="iframe" src="https://xn--e88h.giigle.cf/nbPHinxvJ/https://www.google.com/"></iframe>
+
+    <script>
+        const searchBar = document.getElementById('searchBar');
+        const iframe = document.getElementById('iframe');
+        const particleContainer = document.getElementById('particles');
+        const particleCount = 150; // Increased particle count for more density
+
+        // Function to create particles
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+            particle.style.animationDuration = `${5 + Math.random() * 5}s`; // Randomize duration between 5s and 10s
+            particleContainer.appendChild(particle);
+        }
+
+        searchBar.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                const input = searchBar.value.trim();
+                let url;
+
+                // Check for a full URL
+                if (/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(\.[a-z]{2,6})?(\/.*)?$/i.test(input)) {
+                    url = `https://xn--e88h.giigle.cf/nbPHinxvJ/${input.startsWith('http') ? input : 'https://' + input}`;
+                } 
+                // Check for specific domains
+                else if (/\.(com|net|org|co)/i.test(input)) {
+                    url = `https://xn--e88h.giigle.cf/nbPHinxvJ/https://${input}`;
+                } 
+                // Treat as search query
+                else {
+                    url = `https://xn--e88h.giigle.cf/nbPHinxvJ/https://www.google.com/search?q=${encodeURIComponent(input)}`;
+                }
+
+                // Update iframe source
+                iframe.src = url;
+                searchBar.value = ''; // Clear search bar
+                // Update search bar to show current URL
+                searchBar.value = url.replace('https://xn--e88h.giigle.cf/nbPHinxvJ/', '');
+            }
+        });
+    </script>
+
+</body>
+</html>
