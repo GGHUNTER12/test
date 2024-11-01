@@ -1,1 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Logo Page</title>
+    <style>
+        /* Basic page setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1a1a2e;
+            font-family: Arial, sans-serif;
+            position: relative;
+            flex-direction: column;
+        }
+
+        /* Particle styles */
+        .particle-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out, pulse 3s infinite; /* Added pulse animation */
+            transition: box-shadow 0.3s ease, transform 0.3s ease; /* Smooth transition */
+        }
+
+        /* Floating animation for particles */
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Pulse effect for particles */
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(128, 0, 128, 0.5); } /* Base glow */
+            50% { box-shadow: 0 0 20px rgba(128, 0, 128, 1); } /* Strong glow */
+        }
+
+        /* Glow effect on hovered particles */
+        .particle:hover {
+            box-shadow: 0 0 20px 5px purple; /* Purple glow */
+            transform: scale(1.5); /* Scale up on hover */
+        }
+
+        /* Logo box with curved corners */
+        .logo-container {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 500px; /* Increased width of the box */
+        }
+
+        /* Welcome logo styling */
+        .welcome-logo {
+            width: 150px; /* Smaller size for welcome logo */
+            margin-bottom: 10px; /* Space between logos */
+        }
+
+        /* Main logo styling */
+        .logo-container img {
+            width: 400px; /* Adjusted size */
+            height: auto;
+            display: block;
+        }
+
+        /* Version label styling */
+        .version {
+            position: absolute;
+            bottom: 10px; /* Position it at the bottom */
+            right: 10px; /* Position it at the right */
+            color: white; /* Text color */
+            font-size: 12px; /* Font size */
+        }
+
+        /* Button styling */
+        .fullscreen-button {
+            margin-top: 20px; /* Space between logo and button */
+            padding: 10px 20px; /* Padding for the button */
+            font-size: 16px; /* Font size */
+            color: white; /* Text color */
+            background: transparent; /* Transparent background */
+            border: 2px solid white; /* White border */
+            border-radius: 10px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: all 0.3s ease; /* Smooth transition */
+            outline: none; /* Remove default outline */
+        }
+
+        /* Glow effect for button on hover */
+        .fullscreen-button:hover {
+            box-shadow: 0 0 15px purple, 0 0 30px pink; /* Glow effect */
+            background: rgba(255, 255, 255, 0.1); /* Slight background change */
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle container -->
+    <div class="particle-container" id="particles"></div>
+
+    <!-- Logo container box -->
+    <div class="logo-container" id="logoContainer">
+        <!-- Smaller Welcome logo inside the box -->
+        <img src="https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462571420_1553152448641403_984334477807039531_n.png?_nc_cat=103&ccb=1-7&_nc_sid=9f807c&_nc_ohc=K_UVTzFNGn0Q7kNvgEdt5qB&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AePy4Dv-SBoMfD-ldroYmdn&oh=03_Q7cD1QG0SrSbjiQkD3LGd9bK0MFRDPiHnCCADhBcr_k-YaIzCQ&oe=674C7D30" alt="Welcome Logo" class="welcome-logo">
+        <!-- Main secured logo inside the box -->
+        <img src="https://scontent.fsac1-1.fna.fbcdn.net/v/t1.15752-9/462639560_482548034821531_6973457829895561489_n.png?_nc_cat=111&ccb=1-7&_nc_sid=9f807c&_nc_ohc=QPjIzPqBHrwQ7kNvgGpAWQ_&_nc_zt=23&_nc_ht=scontent.fsac1-1.fna&_nc_gid=AePy4Dv-SBoMfD-ldroYmdn&oh=03_Q7cD1QG-t7Ok_8GjVM6JVZIXPGB_ACwrK8VOzSDdElha08KMDw&oe=674C8753"
+        <!-- Version label -->
+        <div class="version">Version 1.0</div>
+        
+        <!-- Fullscreen button -->
+        <button class="fullscreen-button" onclick="openProxy()">Open Proxy</button>
+    </div>
+
+    <script>
+        // Particle effect generation
+        const particleContainer = document.getElementById('particles');
+        const particleCount = 150; // Increased particle count for more density
+
+        // Function to create particles
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+            particle.style.animationDuration = `${5 + Math.random() * 5}s`;
+            particleContainer.appendChild(particle);
+        }
+
+        // Logo container movement effect
+        const logoContainer = document.getElementById('logoContainer');
+        
+        // Event listener for mouse movement
+        document.addEventListener('mousemove', (event) => {
+            const x = (window.innerWidth / 2 - event.clientX) / 50;
+            const y = (window.innerHeight / 2 - event.clientY) / 50;
+            logoContainer.style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // Open Proxy function
+        function openProxy() {
+            logoContainer.style.transition = 'opacity 0.5s ease'; // Add transition effect
+            logoContainer.style.opacity = '0'; // Fade out the logo container
+            setTimeout(() => {
+                logoContainer.remove(); // Remove the logo container from the DOM after fade out
+                openFullscreen(); // Call the function to open the fullscreen iframe
+            }, 500); // Wait for the fade-out duration
+        }
+
+        // Fullscreen function
+        function openFullscreen() {
+            const iframe = document.createElement('iframe');
+            iframe.src = 'https://snoopthethird.oops.wtf';
+            iframe.style.position = 'fixed';
+            iframe.style.top = '0';
+            iframe.style.left = '0';
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.style.zIndex = '1000';
+            document.body.appendChild(iframe);
+        }
+    </script>
+</body>
+</html>
 
