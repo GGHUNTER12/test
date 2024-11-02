@@ -12,22 +12,29 @@
             margin: 0;
             height: 100vh;
             display: flex;
-            position: relative; /* Added for positioning the floating box */
+            overflow: hidden;
         }
         .sidebar {
+            position: fixed;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
             width: 60px;
-            background: rgba(0, 0, 0, 0.8);
+            background: #1a1a2e;
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 10px 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 10;
         }
         .sidebar .icon {
             cursor: pointer;
             margin: 10px 0;
-            transition: background 0.3s;
+            transition: background 0.3s, box-shadow 0.3s; /* Smooth transition for background and shadow */
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 50%;
             width: 40px;
             height: 40px;
             display: flex;
@@ -35,50 +42,84 @@
             align-items: center;
         }
         .sidebar .icon:hover {
-            background: rgba(128, 0, 128, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px purple, 0 0 30px pink; /* Glow effect for sidebar icons */
         }
         .main-content {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-left: 80px;
         }
         iframe {
             width: 100%;
             height: 100%;
             border: none;
+            border-radius: 20px; /* Curved border for the iframe */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Optional shadow for effect */
         }
-        /* Floating box styling */
-        .fullscreen-button-box {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            padding: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 10; /* Higher z-index for floating box */
+        .fullscreen-btn {
+            position: fixed;
+            bottom: 15px;
+            right: 15px; /* Positioned to allow space for reload button */
+            background-color: #1a1a2e;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
             display: flex;
-            align-items: center;
-        }
-        .fullscreen-button {
-            background-color: #1a1a2e; /* New color for the icon button */
-            color: white; /* White icon */
-            border: none; /* No border */
-            padding: 10px; /* Some padding */
-            cursor: pointer; /* Pointer cursor on hover */
-            border-radius: 5px; /* Rounded corners */
-            display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            transition: all 0.3s ease; /* Smooth transition for the fullscreen button */
         }
-        .fullscreen-button img {
-            width: 20px; /* Size of the icon */
-            height: 20px; /* Size of the icon */
+        .reload-btn {
+            position: fixed;
+            bottom: 15px;
+            right: 75px; /* Positioned right next to fullscreen button */
+            background-color: #1a1a2e;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            transition: all 0.3s ease; /* Smooth transition for the reload button */
+        }
+        .open-blank-btn {
+            position: fixed;
+            bottom: 15px;
+            right: 135px; /* Positioned next to reload button */
+            background-color: #1a1a2e;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            transition: all 0.3s ease; /* Smooth transition for the open blank button */
+        }
+        /* Glow effect for buttons on hover */
+        .fullscreen-btn:hover,
+        .reload-btn:hover,
+        .open-blank-btn:hover {
+            box-shadow: 0 0 15px purple, 0 0 30px pink; /* Glow effect */
+            background: rgba(255, 255, 255, 0.1); /* Slight background change */
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false">
     <div class="sidebar">
         <div class="icon" title="Logo">
             <img src="https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462567906_1264779828100561_3681124885906587443_n.png?_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=z0UnNqgDXLYQ7kNvgGOw1KT&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AaKEnMCJ1fV0FiovFnxbw-6&oh=03_Q7cD1QFkthvvwNJbEOcgGRAv8FdWURdbiNFulc-BfwEii_RLqg&oe=6743BA2B" alt="Top Icon" style="width: 60px; height: 60px;" />
@@ -101,40 +142,57 @@
         <div class="icon" title="Change Background" id="backgroundChanger">
             <img src="https://img.icons8.com/material-outlined/24/ffffff/image.png" alt="Background Icon" />
         </div>
-        <div class="icon" title="Reload" onclick="reloadIframe()">
-            <img src="https://img.icons8.com/material-outlined/24/ffffff/refresh.png" alt="Reload Icon" />
-        </div>
     </div>
     <div class="main-content">
         <iframe src="https://gghunter12.github.io/test/home.html" title="Content Frame"></iframe>
     </div>
-    
-    <!-- Floating fullscreen button box -->
-    <div class="fullscreen-button-box">
-        <button class="fullscreen-button" id="fullscreenButton">
-            <img src="https://img.icons8.com/material-rounded/24/ffffff/full-screen.png" alt="Fullscreen Icon" />
-        </button>
-    </div>
+    <button class="reload-btn" onclick="reloadIframe()">
+        <img src="https://img.icons8.com/material-outlined/24/ffffff/refresh.png" alt="Reload Icon" />
+    </button>
+    <button class="fullscreen-btn" onclick="toggleFullScreen()">
+        <img src="https://img.icons8.com/material-outlined/24/ffffff/full-screen.png" alt="Fullscreen Icon" />
+    </button>
+    <button class="open-blank-btn" onclick="openBlankTab()">
+        <img src="https://img.icons8.com/material-outlined/24/ffffff/tab.png" alt="Open Blank Tab Icon" />
+    </button>
 
-    <script src="script.js"></script>
     <script>
-        // Part to reload the iframe
-        function reloadIframe() {
-            const iframe = document.querySelector('iframe');
-            iframe.src = iframe.src; // time to reload
+        function toggleFullScreen() {
+            const elem = document.documentElement;
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch(err => console.log(`Error attempting to enable full-screen mode: ${err.message}`));
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
         }
 
-        // Fullscreen functionality
-        document.getElementById('fullscreenButton').onclick = function() {
+        function reloadIframe() {
             const iframe = document.querySelector('iframe');
-            if (iframe.requestFullscreen) {
-                iframe.requestFullscreen();
-            } else if (iframe.mozRequestFullScreen) { // Firefox
-                iframe.mozRequestFullScreen();
-            } else if (iframe.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                iframe.webkitRequestFullscreen();
-            } else if (iframe.msRequestFullscreen) { // IE/Edge
-                iframe.msRequestFullscreen();
+            iframe.src = iframe.src; // Reload the iframe by resetting the src
+        }
+
+        function openBlankTab() {
+            const iframeSrc = document.querySelector('iframe').src; // Get the current iframe source
+            const blankTab = window.open('about:blank', '_blank'); // Open a new blank tab
+            blankTab.document.write(`<iframe src="${iframeSrc}" style="width:100%; height:100%; border:none;"></iframe>`); // Embed the current iframe in the new tab
+            blankTab.document.close(); // Close the document to apply changes
+        }
+
+        document.onkeydown = (e) => {
+            if (e.key == 123) e.preventDefault(); // Prevent F12
+            if (e.ctrlKey && e.shiftKey && e.key == 'I') e.preventDefault(); // Prevent Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.key == 'C') e.preventDefault(); // Prevent Ctrl+Shift+C
+            if (e.ctrlKey && e.shiftKey && e.key == 'J') e.preventDefault(); // Prevent Ctrl+Shift+J
+            if (e.ctrlKey && e.key == 'U') e.preventDefault(); // Prevent Ctrl+U
+        };
+
+        // Background changer logic
+        document.getElementById('backgroundChanger').onclick = () => {
+            const newBackground = prompt('Enter a new background image URL:');
+            if (newBackground) {
+                document.body.style.backgroundImage = `url(${newBackground})`;
             }
         };
     </script>
