@@ -1,153 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=yes">
-    <title id="pageTitle"></title>
-    <link rel="shortcut icon" id="pageIcon" href="" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
     <style>
-        body {
-            background-image: url('https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462560324_533263362654902_229266993414360698_n.png?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=QuvfOIBUt0sQ7kNvgEmF4l2&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AMFR2Q0vvPRCXpybOGClt0k&oh=03_Q7cD1QHz_xHbaNAK6R5wmjOEgZkQZaynPIE38Ps-O2S6KmZxkQ&oe=673E5D28');
-            background-size: cover;
+        /* Basic page setup */
+        * {
             margin: 0;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .sidebar {
-            position: fixed;
-            top: 50%;
-            left: 10px;
-            transform: translateY(-50%);
-            width: 60px;
-            background: #1a1a2e;
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 10px 0;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-        }
-        .sidebar .icon {
-            cursor: pointer;
-            margin: 10px 0;
-            transition: background 0.3s, box-shadow 0.3s; /* Smooth transition for background and shadow */
-            padding: 10px;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .sidebar .icon:hover {
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px purple, 0 0 30px pink; /* Glow effect for sidebar icons */
-        }
-        .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-left: 80px;
-        }
-        iframe {
+        body, html {
             width: 100%;
             height: 100%;
-            border: none;
-            border-radius: 20px; /* Curved border for the iframe */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Optional shadow for effect */
-        }
-        .fullscreen-btn {
-            position: fixed;
-            bottom: 15px;
-            right: 15px;
-            background-color: #1a1a2e;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-            transition: all 0.3s ease; /* Smooth transition for the fullscreen button */
+            background: #1a1a2e; /* Same background color */
+            font-family: Arial, sans-serif;
+            position: relative;
+            flex-direction: column;
         }
-        /* Glow effect for fullscreen button on hover */
-        .fullscreen-btn:hover {
+        /* Button styling for background changer */
+        .background-button {
+            margin-top: 20px; /* Space between logo and button */
+            padding: 10px 20px; /* Padding for the button */
+            font-size: 16px; /* Font size */
+            color: white; /* Text color */
+            background: transparent; /* Transparent background */
+            border: 2px solid white; /* White border */
+            border-radius: 10px; /* Rounded corners */
+            cursor: pointer; /* Pointer cursor on hover */
+            transition: all 0.3s ease; /* Smooth transition */
+            outline: none; /* Remove default outline */
+        }
+        /* Glow effect for button on hover */
+        .background-button:hover {
             box-shadow: 0 0 15px purple, 0 0 30px pink; /* Glow effect */
             background: rgba(255, 255, 255, 0.1); /* Slight background change */
         }
     </style>
 </head>
-<body oncontextmenu="return false">
-    <div class="sidebar">
-        <div class="icon" title="Logo">
-            <img src="https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462567906_1264779828100561_3681124885906587443_n.png?_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=z0UnNqgDXLYQ7kNvgGOw1KT&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AaKEnMCJ1fV0FiovFnxbw-6&oh=03_Q7cD1QFkthvvwNJbEOcgGRAv8FdWURdbiNFulc-BfwEii_RLqg&oe=6743BA2B" alt="Top Icon" style="width: 60px; height: 60px;" />
-        </div>
-        <div class="icon" title="Home" onclick="document.querySelector('iframe').src='https://gghunter12.github.io/test/home.html'">
-            <img src="https://img.icons8.com/material-outlined/24/ffffff/home.png" alt="Home Icon" />
-        </div>
-        <div class="icon" title="YouTube Unblocker" onclick="document.querySelector('iframe').src='https://piped.kavin.rocks/trending'">
-            <img src="https://img.icons8.com/material-outlined/24/ffffff/youtube-play.png" alt="YouTube Unblocker Icon" />
-        </div>
-        <div class="icon" title="Game" onclick="document.querySelector('iframe').src='https://play.szvy.win/pages/gxmez.html'">
-            <img src="https://img.icons8.com/material-outlined/24/ffffff/controller.png" alt="Game Icon" />
-        </div>
-        <div class="icon" title="Codes" onclick="document.querySelector('iframe').src='https://gghunter12.github.io/test/code.html'">
-            <img src="https://img.icons8.com/material-outlined/24/ffffff/code.png" alt="Code Icon" />
-        </div>
-        <div class="icon" title="ChatGPT" onclick="document.querySelector('iframe').src='https://gptcall.net/chat.html?data=%7B%22contact%22%3A%7B%22id%22%3A%22mQzEosdaqlUftU-PtKSEC%22%2C%22flow%22%3Atrue%7D%7D'">
-            <img src="https://img.icons8.com/material-outlined/24/ffffff/chat.png" alt="ChatGPT Icon" />
-        </div>
-        <div class="icon" title="Change Background" id="backgroundChanger">
-            <img src="https://img.icons8.com/material-outlined/24/ffffff/image.png" alt="Background Icon" />
-        </div>
-        <div class="icon" title="Settings" onclick="openSettings()">
-            <img src="https://img.icons8.com/material-outlined/24/ffffff/settings.png" alt="Settings Icon" />
-        </div>
-    </div>
-    <div class="main-content">
-        <iframe src="https://gghunter12.github.io/test/home.html" title="Content Frame"></iframe>
-    </div>
-    <button class="fullscreen-btn" onclick="toggleFullScreen()">
-        <img src="https://img.icons8.com/material-outlined/24/ffffff/full-screen.png" alt="Fullscreen Icon" />
-    </button>
-    <button class="fullscreen-btn" onclick="reloadIframe()" style="right: 80px;">
-        <img src="https://img.icons8.com/material-outlined/24/ffffff/refresh.png" alt="Reload Icon" />
-    </button>
+<body>
+    <h1 style="color: white;">Settings</h1>
+    <button class="background-button">Change Background</button>
+    <!-- Add more settings options here -->
     <script>
-        // Fullscreen function
-        function toggleFullScreen() {
-            const iframe = document.querySelector('iframe');
-            if (!document.fullscreenElement) {
-                iframe.requestFullscreen().catch(err => {
-                    alert(`Error attempting to enable full-screen mode: ${err.message}`);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        }
-
-        // Reload iframe function
-        function reloadIframe() {
-            const iframe = document.querySelector('iframe');
-            iframe.src = iframe.src;
-        }
-
-        // Open settings function
-        function openSettings() {
-            document.querySelector('iframe').src = 'settings.html'; // Change this to your settings page URL
-        }
-
-        // Prevent inspect element shortcuts
-        document.onkeydown = (e) => {
-            if (e.key == 123) e.preventDefault();
-            if (e.ctrlKey && e.shiftKey && (e.key == 'I' || e.key == 'C' || e.key == 'J')) e.preventDefault();
-            if (e.ctrlKey && e.key == 'U') e.preventDefault();
+        // Example JavaScript for the background changer
+        document.querySelector('.background-button').onclick = function() {
+            // Logic for changing background
+            document.body.style.backgroundImage = "url('new_background_image_url.jpg')";
         };
     </script>
 </body>
