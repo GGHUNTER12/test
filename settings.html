@@ -23,9 +23,24 @@
             position: relative;
             flex-direction: column;
         }
+        h1 {
+            color: white;
+            margin-bottom: 20px; /* Space between title and input */
+        }
+        /* Input styling */
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid white;
+            border-radius: 5px;
+            width: 80%;
+            outline: none; /* Remove default outline */
+            background: rgba(255, 255, 255, 0.1); /* Slightly transparent background */
+            color: white; /* White text color */
+        }
         /* Button styling for background changer */
         .background-button {
-            margin-top: 20px; /* Space between logo and button */
+            margin-top: 20px; /* Space between input and button */
             padding: 10px 20px; /* Padding for the button */
             font-size: 16px; /* Font size */
             color: white; /* Text color */
@@ -44,15 +59,23 @@
     </style>
 </head>
 <body>
-    <h1 style="color: white;">Settings</h1>
-    <button class="background-button">Change Background</button>
+    <h1>Settings</h1>
+    <input type="text" id="backgroundUrl" placeholder="Enter background image URL" />
+    <button class="background-button" onclick="changeBackground()">Change Background</button>
     <!-- Add more settings options here -->
     <script>
-        // Example JavaScript for the background changer
-        document.querySelector('.background-button').onclick = function() {
-            // Logic for changing background
-            document.body.style.backgroundImage = "url('new_background_image_url.jpg')";
-        };
+        // Change background function
+        function changeBackground() {
+            const url = document.getElementById('backgroundUrl').value; // Get the input value
+            document.body.style.backgroundImage = `url('${url}')`; // Set the background image
+        }
+
+        // Listen for Enter key to change background
+        document.getElementById('backgroundUrl').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                changeBackground(); // Call changeBackground function on Enter key press
+            }
+        });
     </script>
 </body>
 </html>
