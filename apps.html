@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>apps - yes</title>
+    <style>
+        /* Basic page setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1a1a2e;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        /* Particle styles */
+        .particle-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out, pulse 3s infinite;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Floating animation for particles */
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Pulse effect for particles */
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(128, 0, 128, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(128, 0, 128, 1); }
+        }
+
+        /* Apps box styling */
+        .app-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 20px;
+            z-index: 1;
+            transition: transform 0.1s ease;
+        }
+
+        /* Title styling */
+        .app-box h1 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* App buttons grid */
+        .app-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        /* Button styling */
+        .app-button {
+            padding: 10px;
+            font-size: 14px;
+            color: white;
+            background: transparent;
+            border: 2px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        /* Glow effect for button on hover */
+        .app-button:hover {
+            box-shadow: 0 0 15px purple, 0 0 30px pink;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Fullscreen iframe styling */
+        #fullscreenIframe {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 2;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="particle-container" id="particles"></div> <!-- Container for particles -->
+    
+    <div class="app-box" id="appBox">
+        <h1>Apps</h1>
+
+        <div class="app-container">
+            <button class="app-button" onclick="openApp('https://us-dal-02.surfskipp.shop/97cd23c64cc646daa93d7fdf0c2b2e80/https://play.geforcenow.com/mall/#/loginwall')">Geforce</button>
+            <button class="app-button" onclick="openApp('https://us-dal-02.surfskipp.shop/97cd23c64cc646daa93d7fdf0c2b2e80/https://www.tiktok.com')">TikTok</button>
+            <button class="app-button" onclick="openApp('https://us-dal-02.surfskipp.shop/97cd23c64cc646daa93d7fdf0c2b2e80/https://www.snapchat.com')">Snapchat</button>
+            <button class="app-button" onclick="openApp('https://us-dal-02.surfskipp.shop/97cd23c64cc646daa93d7fdf0c2b2e80/https://www.twitch.tv')">Twitch</button>
+            <button class="app-button" onclick="openApp('https://us-dal-02.surfskipp.shop/97cd23c64cc646daa93d7fdf0c2b2e80/https://discord.com')">Discord</button>
+            <button class="app-button" onclick="openApp('https://gghunter12.github.io/test/google.html')">Google</button>
+        </div>
+    </div>
+
+    <!-- Fullscreen iframe for displaying apps -->
+    <iframe id="fullscreenIframe"></iframe>
+
+    <script>
+        const particleContainer = document.getElementById('particles');
+        const particleCount = 150;
+        const appBox = document.getElementById('appBox');
+
+        // Generate particles
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+            particle.style.animationDuration = `${5 + Math.random() * 5}s`;
+            particleContainer.appendChild(particle);
+        }
+
+        // Function to open the app in fullscreen iframe
+        function openApp(url) {
+            const iframe = document.getElementById('fullscreenIframe');
+            iframe.src = url;
+            iframe.style.display = 'block';
+            appBox.style.display = 'none';
+        }
+
+        // Event listener for mouse movement (Parallax Effect)
+        document.addEventListener('mousemove', (event) => {
+            const x = (window.innerWidth / 2 - event.clientX) / 50;
+            const y = (window.innerHeight / 2 - event.clientY) / 50;
+            appBox.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    </script>
+
+</body>
+</html>
