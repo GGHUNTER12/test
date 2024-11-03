@@ -1,39 +1,36 @@
+let debugActive = false;
+let debugInput = '';
 let debugClicks = 0;
 
-document.addEventListener('DOMContentLoaded', function() {
-    const debugInfo = document.getElementById('debugInfo');
-    const fpsElement = document.getElementById('fps');
-    const cpuElement = document.getElementById('cpu');
-    
-    // Click event to track clicks in the bottom left corner
-    document.body.addEventListener('click', function(e) {
-        if (e.clientX < 100 && e.clientY < 100) { // Check if clicked in the bottom left corner
-            debugClicks++;
-            if (debugClicks >= 5) {
-                debugInfo.style.display = 'block'; // Show debug info
-                startFPSCheck(); // Start checking FPS
-                debugClicks = 0; // Reset clicks after activating
-            }
-        }
-    });
-    
-    // FPS and CPU check function
-    function startFPSCheck() {
-        let frame = 0;
-        let startTime = Date.now();
-        
-        function tick() {
-            const time = Date.now();
-            frame++;
-            if (time - startTime > 1000) {
-                fpsElement.innerHTML = (frame / ((time - startTime) / 1000)).toFixed(1);
-                // For simplicity, use a mock CPU usage here; replace with real logic if needed
-                cpuElement.innerHTML = (Math.random() * 100).toFixed(1);
-                startTime = time;
-                frame = 0;
-            }
-            window.requestAnimationFrame(tick);
-        }
-        tick();
+document.addEventListener('keydown', (event) => {
+    // Check for "debug" key sequence
+    debugInput += event.key.toLowerCase();
+    if (debugInput === 'debug') {
+        debugActive = true;
+        showDebugInfo();
+        debugInput = ''; // Reset input after activating
     }
 });
+
+// Function to show debug information
+function showDebugInfo() {
+    const debugInfo = document.createElement('div');
+    debugInfo.id = 'debug-info';
+    debugInfo.style.position = 'fixed';
+    debugInfo.style.top = '10px';
+    debugInfo.style.left = '10px';
+    debugInfo.style.color = 'white';
+    debugInfo.style.zIndex = '1000';
+    debugInfo.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    debugInfo.style.padding = '10px';
+    debugInfo.style.borderRadius = '5px';
+    document.body.appendChild(debugInfo);
+    
+    // Update the debug info every second
+    setInterval(() => {
+        const fps = Math.round(1000 / (performance.now() - (performance.lastTimestamp || performance.now())));
+        performance.lastTimestamp = performance.now();
+        const cpu = Math.round(Math.random() * 100); // Simulated CPU load
+        debugInfo.innerHTML = `FPS: ${fps} <br> CPU: ${cpu}%`;
+    }, 1000);
+}
