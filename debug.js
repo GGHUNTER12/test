@@ -1,36 +1,39 @@
-let clickCount = 0;
+let debugClicks = 0;
 
-// Function to display debug information
-function showDebugInfo() {
-    const debugInfo = document.createElement('div');
-    debugInfo.style.position = 'fixed';
-    debugInfo.style.top = '10px';
-    debugInfo.style.left = '10px';
-    debugInfo.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-    debugInfo.style.color = 'white';
-    debugInfo.style.padding = '10px';
-    debugInfo.style.borderRadius = '5px';
-    debugInfo.style.zIndex = '1000';
-    document.body.appendChild(debugInfo);
-
-    // Update debug information every second
-    setInterval(() => {
-        const fps = Math.round(1000 / (performance.now() - lastTime));
-        const cpu = Math.random() * 100; // Simulated CPU usage
-        debugInfo.innerHTML = `FPS: ${fps} | CPU: ${cpu.toFixed(2)}%`;
-        lastTime = performance.now();
-    }, 1000);
-}
-
-// Click event listener for debug mode activation
-document.body.addEventListener('click', (event) => {
-    if (event.clientX < 50 && event.clientY < 50) { // Adjust this based on your needs
-        clickCount++;
-        if (clickCount === 5) {
-            showDebugInfo();
+document.addEventListener('DOMContentLoaded', function() {
+    const debugInfo = document.getElementById('debugInfo');
+    const fpsElement = document.getElementById('fps');
+    const cpuElement = document.getElementById('cpu');
+    
+    // Click event to track clicks in the bottom left corner
+    document.body.addEventListener('click', function(e) {
+        if (e.clientX < 100 && e.clientY < 100) { // Check if clicked in the bottom left corner
+            debugClicks++;
+            if (debugClicks >= 5) {
+                debugInfo.style.display = 'block'; // Show debug info
+                startFPSCheck(); // Start checking FPS
+                debugClicks = 0; // Reset clicks after activating
+            }
         }
+    });
+    
+    // FPS and CPU check function
+    function startFPSCheck() {
+        let frame = 0;
+        let startTime = Date.now();
+        
+        function tick() {
+            const time = Date.now();
+            frame++;
+            if (time - startTime > 1000) {
+                fpsElement.innerHTML = (frame / ((time - startTime) / 1000)).toFixed(1);
+                // For simplicity, use a mock CPU usage here; replace with real logic if needed
+                cpuElement.innerHTML = (Math.random() * 100).toFixed(1);
+                startTime = time;
+                frame = 0;
+            }
+            window.requestAnimationFrame(tick);
+        }
+        tick();
     }
 });
-
-// Variable to track time for FPS calculation
-let lastTime = performance.now();
