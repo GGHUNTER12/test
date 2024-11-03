@@ -33,7 +33,7 @@
         .sidebar .icon {
             cursor: pointer;
             margin: 10px 0;
-            transition: background 0.3s, box-shadow 0.3s; /* Smooth transition for background and shadow */
+            transition: background 0.3s, box-shadow 0.3s;
             padding: 10px;
             border-radius: 50%;
             width: 40px;
@@ -44,7 +44,7 @@
         }
         .sidebar .icon:hover {
             background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px purple, 0 0 30px pink; /* Glow effect for sidebar icons */
+            box-shadow: 0 0 15px purple, 0 0 30px pink;
         }
         .main-content {
             flex: 1;
@@ -57,47 +57,14 @@
             width: 100%;
             height: 100%;
             border: none;
-            border-radius: 20px; /* Curved border for the iframe */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Optional shadow for effect */
-        }
-        .fullscreen-btn {
-            position: fixed;
-            bottom: 15px;
-            right: 15px; /* Positioned to allow space for reload button */
-            background-color: #1a1a2e;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
+            border-radius: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-            transition: all 0.3s ease; /* Smooth transition for the fullscreen button */
         }
-        .reload-btn {
-            position: fixed;
-            bottom: 15px;
-            right: 75px; /* Positioned right next to fullscreen button */
-            background-color: #1a1a2e;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-            transition: all 0.3s ease; /* Smooth transition for the reload button */
-        }
+        .fullscreen-btn,
+        .reload-btn,
         .open-blank-btn {
             position: fixed;
             bottom: 15px;
-            right: 135px; /* Positioned next to reload button */
             background-color: #1a1a2e;
             border: none;
             border-radius: 50%;
@@ -109,14 +76,35 @@
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             z-index: 10;
-            transition: all 0.3s ease; /* Smooth transition for the open blank button */
+            transition: all 0.3s ease;
         }
-        /* Glow effect for buttons on hover */
+        .fullscreen-btn {
+            right: 15px;
+        }
+        .reload-btn {
+            right: 75px;
+        }
+        .open-blank-btn {
+            right: 135px;
+        }
         .fullscreen-btn:hover,
         .reload-btn:hover,
         .open-blank-btn:hover {
-            box-shadow: 0 0 15px purple, 0 0 30px pink; /* Glow effect */
-            background: rgba(255, 255, 255, 0.1); /* Slight background change */
+            box-shadow: 0 0 15px purple, 0 0 30px pink;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        /* Debug info styles */
+        #debugInfo {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none; /* Hidden by default */
+            font-family: 'Google Sans', Arial, sans-serif;
+            z-index: 100;
         }
     </style>
 </head>
@@ -159,12 +147,20 @@
     <button class="open-blank-btn" onclick="openBlankTab()">
         <img src="https://img.icons8.com/material-outlined/24/ffffff/external-link.png" alt="Open Blank Tab Icon" />
     </button>
+    
+    <div id="debugInfo"></div>
 
     <script>
+        // Initialize variables for FPS and CPU usage
+        let lastFrameTime = performance.now();
+        let frameCount = 0;
+        let cpuUsage = 0;
+        let lastCpuSampleTime = performance.now();
+        let lastUpdate;
+
         function toggleFullScreen() {
-            const elem = document.documentElement;
             if (!document.fullscreenElement) {
-                elem.requestFullscreen().catch(err => console.log(`Error attempting to enable full-screen mode: ${err.message}`));
+                document.documentElement.requestFullscreen().catch(err => console.error(`Error attempting to enable full-screen mode: ${err.message}`));
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
@@ -172,33 +168,74 @@
             }
         }
 
+        function openBlankTab() {
+            window.open('https://gghunter12.github.io/test/google.html', '_blank');
+        }
+
         function reloadIframe() {
             const iframe = document.querySelector('iframe');
-            iframe.src = iframe.src; // Reload the iframe by resetting the src
+            iframe.src = iframe.src; // Reload the iframe
         }
 
-        function openBlankTab() {
-            const iframeSrc = document.querySelector('iframe').src; // Get the current iframe source
-            const blankTab = window.open('about:blank', '_blank'); // Open a new blank tab
-            blankTab.document.write(`<iframe src="${iframeSrc}" style="width:100%; height:100%; border:none;"></iframe>`); // Embed the current iframe in the new tab
-            blankTab.document.close(); // Close the document to apply changes
-        }
+        let debugClicks = 5; // Number of clicks needed to activate debug mode
+        let debugActive = false;
+        let debugKeySequence = "DEBUG"; // The key sequence to activate debug mode
+        let currentInputIndex = 0; // Track the current input index for the key sequence
 
-        document.onkeydown = (e) => {
-            if (e.key == 123) e.preventDefault(); // Prevent F12
-            if (e.ctrlKey && e.shiftKey && e.key == 'I') e.preventDefault(); // Prevent Ctrl+Shift+I
-            if (e.ctrlKey && e.shiftKey && e.key == 'C') e.preventDefault(); // Prevent Ctrl+Shift+C
-            if (e.ctrlKey && e.shiftKey && e.key == 'J') e.preventDefault(); // Prevent Ctrl+Shift+J
-            if (e.ctrlKey && e.key == 'U') e.preventDefault(); // Prevent Ctrl+U
-        };
+        // Function to capture FPS and CPU usage
+        function updateDebugInfo() {
+            if (debugActive) {
+                const currentTime = performance.now();
+                const deltaTime = currentTime - lastFrameTime;
+                frameCount++;
 
-        // Background changer logic
-        document.getElementById('backgroundChanger').onclick = () => {
-            const newBackground = prompt('Enter a new background image URL:');
-            if (newBackground) {
-                document.body.style.backgroundImage = `url(${newBackground})`;
+                // Calculate FPS
+                if (deltaTime >= 1000) {
+                    const fps = Math.round((frameCount / deltaTime) * 1000);
+                    document.getElementById('debugInfo').innerText = `FPS: ${fps} | CPU: ${cpuUsage.toFixed(2)}%`;
+                    frameCount = 0; // Reset frame count for next second
+                    lastFrameTime = currentTime; // Update the last frame time
+                }
+
+                // Simulate CPU usage (for demonstration)
+                const currentCpuSampleTime = performance.now();
+                if (currentCpuSampleTime - lastCpuSampleTime >= 1000) {
+                    cpuUsage = Math.random() * 100; // Random CPU usage percentage
+                    lastCpuSampleTime = currentCpuSampleTime; // Update last sample time
+                }
             }
-        };
+        }
+
+        // Key press event listener for the debug mode
+        document.addEventListener('keydown', function (event) {
+            if (event.key.toUpperCase() === debugKeySequence[currentInputIndex]) {
+                currentInputIndex++;
+                if (currentInputIndex === debugKeySequence.length) {
+                    activateDebugMode();
+                }
+            } else {
+                currentInputIndex = 0; // Reset if the sequence is broken
+            }
+        });
+
+        // Function to activate debug mode
+        function activateDebugMode() {
+            debugActive = true;
+            document.getElementById('debugInfo').style.display = 'block'; // Show debug info
+            updateDebugInfo(); // Initial update
+            setInterval(updateDebugInfo, 1000); // Update every second
+        }
+
+        
+        function randomizeTitleAndIcon() {
+            const randomTitle = titles[Math.floor(Math.random() * titles.length)];
+            const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+            document.title = randomTitle;
+            document.getElementById('pageIcon').href = randomIcon;
+        }
+
+        randomizeTitleAndIcon();
+        setInterval(randomizeTitleAndIcon, 30000); // Change every 30 seconds
     </script>
 </body>
 </html>
