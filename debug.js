@@ -1,80 +1,51 @@
-// Initialize variables
-let debugEnabled = false;
-let inputSequence = [];
-const activationSequence = ['d', 'e', 'b', 'u', 'g'];
-let fpsElement, cpuElement, ipElement;
+(function () {
+    const debugContainer = document.getElementById("debug-container");
+    let fpsDisplay = document.getElementById("fps");
+    let cpuDisplay = document.getElementById("cpu");
+    let ipDisplay = document.getElementById("ip");
+    let keySequence = [];
+    const debugCode = "debug";
 
-// Create elements for displaying debug info
-function setupDebugInfo() {
-    fpsElement = document.createElement('div');
-    cpuElement = document.createElement('div');
-    ipElement = document.createElement('div');
-    [fpsElement, cpuElement, ipElement].forEach((el) => {
-        el.style.position = 'fixed';
-        el.style.top = '10px';
-        el.style.left = '10px';
-        el.style.color = '#fff';
-        el.style.background = 'rgba(0, 0, 0, 0.7)';
-        el.style.padding = '5px';
-        el.style.borderRadius = '5px';
-        el.style.marginBottom = '5px';
-        el.style.fontFamily = 'Arial, sans-serif';
-        el.style.display = 'none'; // Start hidden
-        document.body.appendChild(el);
-    });
-}
-
-// Show or hide debug info elements
-function toggleDebugInfo(visible) {
-    [fpsElement, cpuElement, ipElement].forEach((el) => {
-        el.style.display = visible ? 'block' : 'none';
-    });
-}
-
-// Calculate and display FPS
-function updateFPS() {
+    // Check FPS
     let lastFrameTime = performance.now();
-    function calculateFPS() {
+    function updateFPS() {
         const now = performance.now();
-        const fps = Math.round(1000 / (now - lastFrameTime));
-        fpsElement.textContent = `FPS: ${fps}`;
+        const delta = now - lastFrameTime;
+        const fps = Math.round(1000 / delta);
         lastFrameTime = now;
-        if (debugEnabled) requestAnimationFrame(calculateFPS);
+        fpsDisplay.textContent = fps;
+        requestAnimationFrame(updateFPS);
     }
-    calculateFPS();
-}
 
-// Simulate CPU usage (placeholder)
-function updateCPU() {
-    cpuElement.textContent = 'CPU Usage: 12% (mock data)';
-}
-
-// Fetch and display user's IP address
-async function updateIP() {
-    try {
-        const response = await fetch('https://api64.ipify.org?format=json');
-        const data = await response.json();
-        ipElement.textContent = `IP Address: ${data.ip}`;
-    } catch (error) {
-        ipElement.textContent = 'IP Address: Unavailable';
+    // Simulate CPU Usage
+    function updateCPU() {
+        // Fake CPU usage for display purposes
+        cpuDisplay.textContent = `${Math.floor(Math.random() * 50 + 1)}%`;
     }
-}
+    setInterval(updateCPU, 1000);
 
-// Enable debug mode when "debug" is typed
-function handleKeyPress(e) {
-    inputSequence.push(e.key.toLowerCase());
-    if (inputSequence.join('').includes(activationSequence.join(''))) {
-        inputSequence = []; // Reset sequence
-        debugEnabled = !debugEnabled; // Toggle debug mode
-        toggleDebugInfo(debugEnabled);
-        if (debugEnabled) {
-            updateFPS();
-            updateCPU();
-            updateIP();
+    // Fetch IP Address
+    async function fetchIP() {
+        try {
+            const response = await fetch("https://api.ipify.org?format=json");
+            const data = await response.json();
+            ipDisplay.textContent = data.ip;
+        } catch (error) {
+            ipDisplay.textContent = "Error";
+            console.error("Failed to fetch IP:", error);
         }
     }
-}
 
-// Initialize debug mode setup
-setupDebugInfo();
-document.addEventListener('keydown', handleKeyPress);
+    // Listen for "debug" sequence
+    document.addEventListener("keydown", (e) => {
+        keySequence.push(e.key.toLowerCase());
+        if (keySequence.slice(-debugCode.length).join("") === debugCode) {
+            debugContainer.style.display = debugContainer.style.display === "none" ? "block" : "none";
+            if (debugContainer.style.display === "block") {
+                fetchIP(); // Fetch IP when debug is enabled
+                updateFPS(); // Start FPS updates
+            }
+            keySequence = []; // Reset sequence
+        }
+    });
+})();
