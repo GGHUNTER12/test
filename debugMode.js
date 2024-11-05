@@ -28,7 +28,7 @@ function enableDebugMode() {
     document.body.appendChild(debugInfoContainer);
 
     // Start fetching IP address
-    fetch("https://ipinfo.io/json?token=YOUR_TOKEN")
+    fetch("https://ipinfo.io/json")
         .then(response => response.json())
         .then(data => ipAddress = data.ip)
         .catch(() => ipAddress = "Unable to fetch");
