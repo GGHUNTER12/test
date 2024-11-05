@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, minimal-ui, shrink-to-fit=yes">
     <title id="pageTitle"></title>
     <link rel="shortcut icon" id="pageIcon" href="" type="image/x-icon">
+    <script src="loadingScreen.js" defer></script>
     <style>
         body {
             background-image: url('https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462560324_533263362654902_229266993414360698_n.png?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=QuvfOIBUt0sQ7kNvgEmF4l2&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&_nc_gid=AMFR2Q0vvPRCXpybOGClt0k&oh=03_Q7cD1QHz_xHbaNAK6R5wmjOEgZkQZaynPIE38Ps-O2S6KmZxkQ&oe=673E5D28');
@@ -33,7 +34,7 @@
         .sidebar .icon {
             cursor: pointer;
             margin: 10px 0;
-            transition: background 0.3s, box-shadow 0.3s; /* Smooth transition for background and shadow */
+            transition: background 0.3s, box-shadow 0.3s;
             padding: 10px;
             border-radius: 50%;
             width: 40px;
@@ -44,7 +45,7 @@
         }
         .sidebar .icon:hover {
             background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px purple, 0 0 30px pink; /* Glow effect for sidebar icons */
+            box-shadow: 0 0 15px purple, 0 0 30px pink;
         }
         .main-content {
             flex: 1;
@@ -57,13 +58,12 @@
             width: 100%;
             height: 100%;
             border: none;
-            border-radius: 20px; /* Curved border for the iframe */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Optional shadow for effect */
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
-        .fullscreen-btn {
+        .fullscreen-btn, .reload-btn, .open-blank-btn {
             position: fixed;
             bottom: 15px;
-            right: 15px; /* Positioned to allow space for reload button */
             background-color: #1a1a2e;
             border: none;
             border-radius: 50%;
@@ -75,48 +75,16 @@
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             z-index: 10;
-            transition: all 0.3s ease; /* Smooth transition for the fullscreen button */
+            transition: all 0.3s ease;
         }
-        .reload-btn {
-            position: fixed;
-            bottom: 15px;
-            right: 75px; /* Positioned right next to fullscreen button */
-            background-color: #1a1a2e;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-            transition: all 0.3s ease; /* Smooth transition for the reload button */
-        }
-        .open-blank-btn {
-            position: fixed;
-            bottom: 15px;
-            right: 135px; /* Positioned next to reload button */
-            background-color: #1a1a2e;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-            transition: all 0.3s ease; /* Smooth transition for the open blank button */
-        }
-        /* Glow effect for buttons on hover */
+        .reload-btn { right: 75px; }
+        .fullscreen-btn { right: 15px; }
+        .open-blank-btn { right: 135px; }
         .fullscreen-btn:hover,
         .reload-btn:hover,
         .open-blank-btn:hover {
-            box-shadow: 0 0 15px purple, 0 0 30px pink; /* Glow effect */
-            background: rgba(255, 255, 255, 0.1); /* Slight background change */
+            box-shadow: 0 0 15px purple, 0 0 30px pink;
+            background: rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
@@ -143,9 +111,6 @@
         <div class="icon" title="ChatGPT" onclick="document.querySelector('iframe').src='https://gptcall.net/chat.html?data=%7B%22contact%22%3A%7B%22id%22%3A%22mQzEosdaqlUftU-PtKSEC%22%2C%22flow%22%3Atrue%7D%7D'">
             <img src="https://img.icons8.com/material-outlined/24/ffffff/chat.png" alt="ChatGPT Icon" />
         </div>
-        <div class="icon" title="Change Background" id="backgroundChanger">
-            <img src="https://img.icons8.com/material-outlined/24/ffffff/image.png" alt="Background Icon" />
-        </div>
     </div>
     <div class="main-content">
         <iframe src="https://gghunter12.github.io/test/home.html" title="Content Frame"></iframe>
@@ -164,7 +129,7 @@
         function toggleFullScreen() {
             const elem = document.documentElement;
             if (!document.fullscreenElement) {
-                elem.requestFullscreen().catch(err => console.log(Error attempting to enable full-screen mode: ${err.message}));
+                elem.requestFullscreen().catch(err => console.log(`Error attempting to enable full-screen mode: ${err.message}`));
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
@@ -180,25 +145,13 @@
         function openBlankTab() {
             const iframeSrc = document.querySelector('iframe').src; // Get the current iframe source
             const blankTab = window.open('about:blank', '_blank'); // Open a new blank tab
-            blankTab.document.write(<iframe src="${iframeSrc}" style="width:100%; height:100%; border:none;"></iframe>); // Embed the current iframe in the new tab
+            blankTab.document.write(`<iframe src="${iframeSrc}" style="width:100%; height:100%; border:none;"></iframe>`); // Embed the current iframe in the new tab
             blankTab.document.close(); // Close the document to apply changes
         }
-
-        document.onkeydown = (e) => {
-            if (e.key == 123) e.preventDefault(); // Prevent F12
-            if (e.ctrlKey && e.shiftKey && e.key == 'I') e.preventDefault(); // Prevent Ctrl+Shift+I
-            if (e.ctrlKey && e.shiftKey && e.key == 'C') e.preventDefault(); // Prevent Ctrl+Shift+C
-            if (e.ctrlKey && e.shiftKey && e.key == 'J') e.preventDefault(); // Prevent Ctrl+Shift+J
-            if (e.ctrlKey && e.key == 'U') e.preventDefault(); // Prevent Ctrl+U
-        };
-
-        // Background changer logic
-        document.getElementById('backgroundChanger').onclick = () => {
-            const newBackground = prompt('Enter a new background image URL:');
-            if (newBackground) {
-                document.body.style.backgroundImage = url(${newBackground});
-            }
-        };
     </script>
+    <script src="https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/randomTitleAndIcon.js"></script>
+    <script src="https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/securityRestrictions.js"></script>
+    <script src="https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/debugMode.js"></script>
+    <script src="https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/loadingScreen.js"></script>
 </body>
 </html>
