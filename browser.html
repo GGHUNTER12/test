@@ -30,6 +30,22 @@
             padding: 10px 0;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             z-index: 10;
+            transition: width 0.3s, height 0.3s; /* Animation for width and height */
+        }
+        .sidebar.collapsed {
+            width: 60px;
+            height: 60px;
+            padding: 10px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sidebar.collapsed .icon {
+            margin: 0;
+        }
+        .sidebar.collapsed .icon:not(:first-child) {
+            display: none;
         }
         .sidebar .icon {
             cursor: pointer;
@@ -121,15 +137,33 @@
     <button class="fullscreen-btn" onclick="toggleFullScreen()">
         <img src="https://img.icons8.com/material-outlined/24/ffffff/full-screen.png" alt="Fullscreen Icon" />
     </button>
-    <button class="open-blank-btn" onclick="openBlankTab()">
+    <button class="open-blank-btn" onclick="openIframeInBlankTab()">
         <img src="https://img.icons8.com/material-outlined/24/ffffff/external-link.png" alt="Open Blank Tab Icon" />
     </button>
 
     <script>
+        const sidebar = document.querySelector('.sidebar');
+        const logoIcon = document.querySelector('.sidebar .icon:first-child');
+        let isCollapsed = false;
+
+        logoIcon.addEventListener('click', () => {
+            if (!isCollapsed) {
+                sidebar.classList.add('collapsed');
+                isCollapsed = true;
+            } else {
+                sidebar.classList.remove('collapsed');
+                isCollapsed = false;
+            }
+        });
+
+        function reloadIframe() {
+            const iframe = document.querySelector('iframe');
+            iframe.src = iframe.src;
+        }
+
         function toggleFullScreen() {
-            const elem = document.documentElement;
             if (!document.fullscreenElement) {
-                elem.requestFullscreen().catch(err => console.log(`Error attempting to enable full-screen mode: ${err.message}`));
+                document.documentElement.requestFullscreen();
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
@@ -137,21 +171,34 @@
             }
         }
 
-        function reloadIframe() {
+        function openIframeInBlankTab() {
             const iframe = document.querySelector('iframe');
-            iframe.src = iframe.src; // Reload the iframe by resetting the src
+            const newTab = window.open('about:blank', '_blank');
+            newTab.document.write(`
+                <html>
+                    <head>
+                        <title>Framed Content</title>
+                        <style>
+                            body { margin: 0; }
+                            iframe {
+                                width: 100vw;
+                                height: 100vh;
+                                border: none;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <iframe src="${iframe.src}"></iframe>
+                    </body>
+                </html>
+            `);
+            newTab.document.close(); // Ensure the document is rendered
         }
-
-        function openBlankTab() {
-            const iframeSrc = document.querySelector('iframe').src; // Get the current iframe source
-            const blankTab = window.open('about:blank', '_blank'); // Open a new blank tab
-            blankTab.document.write(`<iframe src="${iframeSrc}" style="width:100%; height:100%; border:none;"></iframe>`); // Embed the current iframe in the new tab
-            blankTab.document.close(); // Close the document to apply changes
-        }
+            
     </script>
     <script src="https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/randomTitleAndIcon.js"></script>
     <script src="https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/securityRestrictions.js"></script>
     <script src="https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/debugMode.js"></script>
-    <script src="https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/loadingScreen.js"></script>
+    
 </body>
 </html>
