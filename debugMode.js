@@ -2,7 +2,6 @@
 let debugModeEnabled = false;
 let fps, lastTime = performance.now(), frameCount = 0;
 let ipAddress = "Fetching...";
-let cpuUsageEnabled = true; // Toggle CPU display based on network restrictions
 
 // Add event listener for key input
 window.addEventListener('keyup', (event) => {
@@ -13,7 +12,7 @@ window.addEventListener('keyup', (event) => {
     }
 });
 
-// Function to display FPS and IP address (and CPU if allowed)
+// Function to display FPS and IP address
 function enableDebugMode() {
     // Create a debug info container in the top-left corner
     const debugInfoContainer = document.createElement("div");
@@ -34,23 +33,8 @@ function enableDebugMode() {
         .then(data => ipAddress = data.ip)
         .catch(() => ipAddress = "Unable to fetch");
 
-    // Monitor for console warnings related to cross-origin restrictions
-    detectCrossOriginIssues();
-
     // Start updating debug info
     updateDebugInfo();
-}
-
-// Function to detect cross-origin restriction warnings
-function detectCrossOriginIssues() {
-    const originalConsoleError = console.error;
-
-    console.error = function (message, ...optionalParams) {
-        if (typeof message === 'string' && message.includes('parser-blocking')) {
-            cpuUsageEnabled = false; // Disable CPU display if cross-origin restrictions detected
-        }
-        originalConsoleError.apply(console, [message, ...optionalParams]);
-    };
 }
 
 // Function to calculate FPS
@@ -75,8 +59,7 @@ function updateDebugInfo() {
     debugInfoContainer.innerHTML = `
         <strong>Debug Mode</strong><br>
         FPS: ${fps || "Calculating..."}<br>
-        IP: ${ipAddress}<br>
-        ${cpuUsageEnabled ? "CPU: Enabled" : ""}
+        IP: ${ipAddress}
     `;
 
     // Continue updating
