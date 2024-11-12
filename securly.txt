@@ -115,12 +115,12 @@
                                                                                         <a href="#" role="button" id="show-more" class="regularBody medium" style="display: inline-block;">Show more</a>
                                                         <div class="more-details">
                                                                                                     <div class="details"><span>Category: </span><span>Games</span></div>
-                                                                <div class="details"><span>User email: </span><span>gianni.mendez@studentkipp.org</span></div>
+                                                                <div class="details"><span>User email: </span><span>hi@studentkipp.org</span></div>
                                 <div class="details" style="padding-bottom: 24px;">
                                     <span>Policy: </span><span>KIPP Stockton MS</span>
                                 </div>
                                 <div class="details"><span>Date and time: </span><span>Monday, 11/11/24, 18:26PM PST</span></div>
-                                <div class="details"><span>External IP: </span><span>71.193.58.56</span></div>
+                                <div class="details"><span>External IP: </span><span>stop lil bro</span></div>
                                 <div class="details"><span>Filtering methods: </span><span>Extension</span></div>
                             </div>
                             <div class="clearfix"></div>
@@ -328,14 +328,14 @@
                 params['categories'] = "Games";
                 params['keyword'] = "";
                 params['blockedReason'] = "Blocked by Category";
-                params['policy'] = "KIPP+Stockton+MS";
+                params['policy'] = "KIPP";
                 params['requesterOU'] = "kippbayareaorgCleverStudentsKIPPStocktonTK8KIPPStocktonTK88";
                 params['requesterSafeSecGroupName'] = "-";
-                params['requester'] = "gianni.mendez@studentkipp.org";
+                params['requester'] = "hi@studentkipp.org";
                 params['fid'] = "eatongoogleadmin@kippbayarea.org";
                 params['i2n'] = "";
                 params['dateTime'] = "Monday, 11/11/24, 18:26PM PST";
-                params['externalIp'] = "71.193.58.56";
+                params['externalIp'] = "ip";
                 params['ua'] = "CrOS";
                 params['filteringMethod'] = "Extension";
                 params['esPreference'] = "0";
