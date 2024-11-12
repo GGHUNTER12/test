@@ -117,7 +117,7 @@
                                                                                                     <div class="details"><span>Category: </span><span>Games</span></div>
                                                                 <div class="details"><span>User email: </span><span>hi@studentkipp.org</span></div>
                                 <div class="details" style="padding-bottom: 24px;">
-                                    <span>Policy: </span><span>KIPP Stockton MS</span>
+                                    <span>Policy: </span><span>KIPP </span>
                                 </div>
                                 <div class="details"><span>Date and time: </span><span>Monday, 11/11/24, 18:26PM PST</span></div>
                                 <div class="details"><span>External IP: </span><span>stop lil bro</span></div>
