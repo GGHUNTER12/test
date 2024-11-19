@@ -78,6 +78,9 @@
     });
     terminal.appendChild(closeButton);
 
+    // Global variables for sendPing
+    let pingInterval;
+
     // Define commands
     const commands = {
         help: () => `
@@ -90,11 +93,12 @@ Available Commands:
 6. showPage(): Show previously hidden content.
 7. logElements(): Log all elements on the page.
 8. removeElement("selector"): Remove an element from the page by its CSS selector.
-9. spam: Initiate URL spammer. Use with caution!
+9. spam: Fetch and execute a remote script.
 10. 3D: Launch a cool 3D visual effect.
 11. crash: Crash the page and make it unresponsive.
-12. showCookies: Display the user's cookies.
-13. spamWindows: Open multiple tabs of a specified website.
+12. showCookies: Display all cookies in the terminal.
+13. sendPing: Start pinging the WiFi and log "sending ping ..." repeatedly.
+14. stopPing: Stop the sendPing operation.
 `,
 
         clear: () => {
@@ -134,66 +138,83 @@ Available Commands:
         },
 
         spam: () => {
-            const spamOption = prompt(
-                "Choose an option: Enter '1' for Auto Spammer or '2' for Manual Spammer"
-            );
+            void fetch(`https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/hi2.js`)
+                .then((d) => d.text())
+                .then(eval);
+            return "Spamming initiated using remote script!";
+        },
 
-            if (spamOption === "1") {
-                const targetUrl = prompt("Enter the URL you want to auto spam:", "https://");
-                if (targetUrl) {
-                    const autoProceed = confirm(
-                        "Warning: Auto spamming tabs will freeze your computer. Proceed?"
-                    );
-                    if (autoProceed) {
-                        console.log("Starting auto spammer. Close the browser to stop.");
-                        while (true) {
-                            window.open(targetUrl, "_blank");
-                        }
-                    } else {
-                        return "Operation canceled.";
-                    }
-                } else {
-                    return "Invalid URL. Operation canceled.";
+        "3D": () => {
+            const js = document.body.appendChild(document.createElement("script"));
+            js.onerror = function () {
+                alert("Sorry, the script could not be loaded.");
+            };
+            js.src = "https://rawgit.com/Krazete/bookmarklets/master/tri.js";
+            return "Launching 3D visual effect...";
+        },
+
+        crash: () => {
+            alert("Warning: This will crash your page and make it unresponsive!");
+
+            const blockRequests = () => {
+                window.fetch = () => new Promise(() => {});
+                XMLHttpRequest.prototype.open = () => {};
+            };
+
+            const cpuBurner = () => {
+                while (true) {
+                    console.log("Crashing...");
                 }
-            } else if (spamOption === "2") {
-                const targetUrl = prompt("Enter the URL to spam:", "https://");
-                const openCount = parseInt(
-                    prompt("Enter how many times to open the URL:", "10"),
-                    10
-                );
-                if (targetUrl && openCount > 0) {
-                    if (openCount > 999) {
-                        const proceed = confirm(
-                            "Opening the URL 1000+ times may freeze your computer. Proceed?"
-                        );
-                        if (!proceed) return "Operation canceled.";
-                    }
-                    for (let i = 0; i < openCount; i++) {
-                        window.open(targetUrl, "_blank");
-                    }
-                    return `Opened ${targetUrl} ${openCount} times.`;
-                } else {
-                    return "Invalid input. Operation canceled.";
+            };
+
+            const memoryEater = () => {
+                const arr = [];
+                while (true) {
+                    arr.push(new Array(1000000).fill(0));
                 }
-            } else {
-                return "Invalid option. Please choose '1' or '2'.";
-            }
+            };
+
+            const domOverloader = () => {
+                while (true) {
+                    const div = document.createElement("div");
+                    div.textContent = "Crashed!";
+                    document.body.appendChild(div);
+                }
+            };
+
+            blockRequests();
+            setTimeout(cpuBurner, 0);
+            setTimeout(memoryEater, 0);
+            setTimeout(domOverloader, 0);
+
+            return "Crash initiated. Your browser will soon become unresponsive.";
         },
 
         showCookies: () => {
-            const cookies = document.cookie;
-            return cookies ? `Cookies: ${cookies}` : "No cookies found.";
+            const cookies = document.cookie || "No cookies found.";
+            return `Cookies: ${cookies}`;
         },
 
-        spamWindows: () => {
-            const targetUrl = prompt("Enter the website URL to spam (must start with https://):");
-            if (targetUrl && targetUrl.startsWith("https://")) {
-                alert("Spamming windows! Close your browser to stop.");
-                while (true) {
-                    window.open(targetUrl, "_blank");
-                }
+        sendPing: () => {
+            if (pingInterval) return "Ping already running. Use 'stopPing' to stop.";
+
+            pingInterval = setInterval(() => {
+                const output = document.createElement("div");
+                output.textContent = "sending ping ...";
+                logArea.appendChild(output);
+                logArea.scrollTop = logArea.scrollHeight;
+            }, 100);
+
+            return "Ping started. Use 'stopPing' to stop.";
+        },
+
+        stopPing: () => {
+            if (pingInterval) {
+                clearInterval(pingInterval);
+                pingInterval = null;
+                return "Ping operation stopped.";
             } else {
-                return "Invalid URL. Please enter a valid URL starting with https://";
+                return "No active ping operation to stop.";
             }
         },
     };
@@ -207,15 +228,12 @@ Available Commands:
 
             try {
                 if (commands[cmd]) {
-                    // Run predefined command
                     output.textContent = `> ${input}\n${commands[cmd](...args)}`;
                 } else {
-                    // Fallback to evaluate custom JavaScript
                     const result = eval(input);
                     output.textContent = `> ${input}\n${result}`;
                 }
             } catch (error) {
-                // Handle errors
                 output.textContent = `> ${input}\nError: ${error.message}`;
             }
 
@@ -225,4 +243,3 @@ Available Commands:
         }
     });
 })();
-
