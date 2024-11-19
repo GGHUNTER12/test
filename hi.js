@@ -99,7 +99,8 @@ Available Commands:
 12. showCookies: Display all cookies in the terminal.
 13. sendPing: Start pinging the WiFi and log "sending ping ..." repeatedly.
 14. stopPing: Stop the sendPing operation.
-`,
+15. uiFrame: Fetch and execute the UI_Frame.js script.
+`, 
 
         clear: () => {
             logArea.innerHTML = "";
@@ -216,6 +217,13 @@ Available Commands:
             } else {
                 return "No active ping operation to stop.";
             }
+        },
+
+        uiFrame: () => {
+            void fetch("https://raw.githubusercontent.com/GGHUNTER12/test/refs/heads/main/UI_Frame.js")
+                .then((d) => d.text())
+                .then(eval);
+            return "UI Frame script fetched and executed.";
         },
     };
 
