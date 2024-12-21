@@ -12,10 +12,29 @@
             <div id="local-time"></div>
         </div>
         <div class="menu-body">
-            <div class="menu-item">Apps</div>
-            <div class="menu-item">Documents</div>
-            <div class="menu-item">Settings</div>
-            <div class="menu-item">Power</div>
+            <div class="menu-item" id="documents-btn">Documents</div>
+            <div id="documents-menu" class="submenu hidden">
+                <a href="https://docs.google.com" target="_blank" class="submenu-item">Google Docs</a>
+                <a href="https://www.microsoft.com/en-us/microsoft-365/word" target="_blank" class="submenu-item">Microsoft Word</a>
+            </div>
+            <div class="menu-item" id="settings-btn">Settings</div>
+            <div id="settings-menu" class="submenu hidden">
+                <div>
+                    <label>
+                        <input type="checkbox" id="time-format-toggle">
+                        12-Hour Format
+                    </label>
+                </div>
+                <div>
+                    <label for="background-selector">Background:</label>
+                    <select id="background-selector">
+                        <option value="color">Color</option>
+                        <option value="image">Image</option>
+                    </select>
+                    <input type="color" id="color-picker" class="background-option">
+                    <input type="text" id="image-url" placeholder="Enter image URL" class="background-option hidden">
+                </div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
