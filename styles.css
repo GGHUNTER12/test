@@ -6,6 +6,7 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    transition: background 0.3s ease;
 }
 
 .menu {
@@ -50,4 +51,36 @@ body {
 .menu-item:hover {
     background: rgba(255, 255, 255, 0.9);
     transform: scale(1.05);
+}
+
+.submenu {
+    margin: 10px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none;
+}
+
+.submenu-item {
+    text-decoration: none;
+    color: #000;
+    font-size: 1rem;
+    margin: 5px 0;
+    text-align: center;
+}
+
+.submenu-item:hover {
+    color: #0078d7;
+}
+
+.background-option {
+    margin-top: 10px;
+    width: 100%;
+    padding: 5px;
+    font-size: 1rem;
 }
