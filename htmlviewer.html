@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleek HTML Viewer with Ace Editor</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      height: 100vh;
+      background: linear-gradient(145deg, #6e7dff, #3f50c3);
+      color: white;
+      overflow: hidden;
+      flex-direction: column;
+    }
+    .container {
+      display: flex;
+      flex-grow: 1;
+      width: 100%;
+    }
+    .editor {
+      display: flex;
+      width: 50%;
+      height: 100%;
+      padding: 10px;
+      background: #1e1e1e;
+      border-right: 2px solid #444;
+      color: #d4d4d4;
+      flex-grow: 1;
+      border-radius: 5px;
+      word-wrap: break-word; /* Word wrap added */
+    }
+    .preview {
+      width: 50%;
+      height: 100%;
+      padding: 10px;
+      background: #222;
+      overflow-y: auto;
+      border-radius: 5px;
+    }
+    .preview iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .controls {
+      display: flex;
+      justify-content: flex-start;
+      padding: 10px;
+      background: #444;
+      align-items: center;
+      border-radius: 5px;
+    }
+    .controls button {
+      background: #6e7dff;
+      border: none;
+      padding: 10px 15px;
+      margin-right: 10px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    .controls button:hover {
+      background: #3f50c3;
+    }
+    .controls button:active {
+      transform: scale(0.98);
+    }
+    .line-count {
+      margin-left: 20px;
+      color: #999;
+      font-size: 16px;
+    }
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="editor">
+      <div id="editor" style="width: 100%; height: 100%;"></div>
+    </div>
+    <div class="preview">
+      <iframe id="previewIframe"></iframe>
+    </div>
+  </div>
+  
+  <div class="controls">
+    <button id="runBtn">Run</button>
+    <button id="clearBtn">Clear</button>
+    <button id="saveBtn">Save</button>
+    <button id="importBtn">Import</button>
+    <button id="previewPageBtn">Preview Page</button> <!-- Renamed button -->
+    <button id="fullScreenBtn"><i class="fas fa-expand"></i></button>
+    <span class="line-count" id="lineCount">Lines: 0</span>
+  </div>
+
+  <div class="particles" id="particles-js"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+  <script>
+    // Particles.js effect
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 30 },
+        size: { value: 3 },
+        move: { speed: 2 },
+        line_linked: { enable: false }
+      }
+    });
+
+    // Ace Editor setup
+    const editor = ace.edit("editor");
+    editor.setTheme("ace/theme/tomorrow_night");
+    editor.session.setMode("ace/mode/html");
+    editor.setOptions({
+      fontSize: "16px",
+      showPrintMargin: false,
+      showLineNumbers: true,
+      highlightActiveLine: true,
+      enableBasicAutocompletion: true,
+      enableLiveAutocompletion: true,
+      spellcheck: false
+    });
+
+    // Handling the HTML input and preview update
+    const iframe = document.getElementById("previewIframe");
+    const lineCountElement = document.getElementById("lineCount");
+
+    // Update line count
+    function updateLineCount() {
+      const lines = editor.getSession().getLength();
+      lineCountElement.textContent = `Lines: ${lines}`;
+    }
+
+    // Run button to update preview
+    document.getElementById("runBtn").addEventListener("click", function() {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open();
+      doc.write(editor.getValue());
+      doc.close();
+    });
+
+    // Clear button to clear all text in the editor
+    document.getElementById("clearBtn").addEventListener("click", function() {
+      editor.setValue("");  // Clear the editor
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open();
+      doc.write('');  // Clear the preview as well
+      doc.close();
+      updateLineCount();  // Reset line count
+    });
+
+    // Save Button to save HTML
+    document.getElementById("saveBtn").addEventListener("click", function() {
+      const blob = new Blob([editor.getValue()], { type: "text/html" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "index.html";
+      link.click();
+    });
+
+    // Import button to load HTML file into the editor
+    document.getElementById("importBtn").addEventListener("click", function() {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = ".html";
+      input.click();
+
+      input.addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file && file.type === "text/html") {
+          const reader = new FileReader();
+          reader.onload = function() {
+            editor.setValue(reader.result);  // Insert the file content into the editor
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(editor.getValue());  // Update the preview
+            doc.close();
+            updateLineCount();  // Update line count
+          };
+          reader.readAsText(file);
+        }
+      });
+    });
+
+    // Preview Page button
+    document.getElementById("previewPageBtn").addEventListener("click", function() {
+      const newWindow = window.open("about:blank", "_blank");
+      newWindow.document.open();
+      newWindow.document.write(editor.getValue());  // Write the HTML code into the new tab
+      newWindow.document.close();
+    });
+
+    // Fullscreen button for the editor
+    document.getElementById("fullScreenBtn").addEventListener("click", function() {
+      document.body.classList.toggle("fullscreen");
+      document.documentElement.requestFullscreen();
+    });
+
+    // Initial run when page loads
+    editor.session.on("change", function() {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open();
+      doc.write(editor.getValue());
+      doc.close();
+      updateLineCount();  // Update line count
+    });
+
+    // Initial line count update
+    updateLineCount();
+  </script>
+</body>
+</html>
