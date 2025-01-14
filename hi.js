@@ -100,6 +100,8 @@ Available Commands:
 13. sendPing: Start pinging the WiFi and log "sending ping ..." repeatedly.
 14. stopPing: Stop the sendPing operation.
 15. uiFrame: Fetch and execute the UI_Frame.js script.
+16. cheatBlooket: Copy the Blooket cheat code to your clipboard.
+17. cheatGimkit: Copy the Gimkit cheat code to your clipboard.
 `, 
 
         clear: () => {
