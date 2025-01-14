@@ -67,7 +67,7 @@ searchBar.style.marginRight = '10px';
 
 // Create profile picture
 const profilePic = document.createElement('img');
-profilePic.src = localStorage.getItem('profilePic') || 'https://via.placeholder.com/40'; // Load from localStorage
+profilePic.src = localStorage.getItem('profilePic') || 'https://th.bing.com/th/id/OIP.BkoXurD30qD41Q4pDKvDAAHaGH?rs=1&pid=ImgDetMain'; // Load from localStorage
 profilePic.alt = 'Profile Picture';
 profilePic.style.width = '40px';
 profilePic.style.height = '40px';
@@ -163,7 +163,7 @@ reloadButton.addEventListener('mouseout', () => {
 
 // Create iframe for displaying content
 const iframe = document.createElement('iframe');
-iframe.src = 'https://gghunter12.github.io/test/YouTube.html';
+iframe.src = 'https://gooogleserver-as3.macgyver.cf/';
 iframe.style.width = '100%';
 iframe.style.height = 'calc(100% - 100px)';
 iframe.style.borderRadius = '10px';
