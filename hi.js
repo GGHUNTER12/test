@@ -100,13 +100,30 @@ Available Commands:
 13. sendPing: Start pinging the WiFi and log "sending ping ..." repeatedly.
 14. stopPing: Stop the sendPing operation.
 15. uiFrame: Fetch and execute the UI_Frame.js script.
-16. cheatBlooket: Copy the Blooket cheat code to your clipboard.
-17. cheatGimkit: Copy the Gimkit cheat code to your clipboard.
+16. cheatBlooket: Copy the Blooket cheat script to your clipboard.
+17. cheatGimkit: Copy the Gimkit cheat script to your clipboard.
 `, 
-
         clear: () => {
             logArea.innerHTML = "";
             return "Terminal cleared.";
+        },
+
+        cheatBlooket: async () => {
+            const response = await fetch(
+                "https://raw.githubusercontent.com/swagging-post/Blooket-Cheat-GUI-aka-Swaggers-GUI/refs/heads/main/cheats/gui/gui.js"
+            );
+            const text = await response.text();
+            await navigator.clipboard.writeText(text);
+            return "Blooket cheat script copied to clipboard.";
+        },
+
+        cheatGimkit: async () => {
+            const response = await fetch(
+                "https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/refs/heads/main/build/bundle.js"
+            );
+            const text = await response.text();
+            await navigator.clipboard.writeText(text);
+            return "Gimkit cheat script copied to clipboard.";
         },
 
         changeBgColor: (color) => {
