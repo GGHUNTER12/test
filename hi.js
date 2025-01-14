@@ -6,15 +6,19 @@
     terminal.style.left = "0";
     terminal.style.width = "100%";
     terminal.style.height = "300px";
-    terminal.style.backgroundColor = "#1e1e1e";
+    terminal.style.background = "linear-gradient(135deg, #1e1e2f, #2a2a3e)";
     terminal.style.color = "#00ff00";
-    terminal.style.fontFamily = "monospace";
+    terminal.style.fontFamily = "Consolas, Monaco, monospace";
     terminal.style.fontSize = "14px";
+    terminal.style.borderTopLeftRadius = "10px";
+    terminal.style.borderTopRightRadius = "10px";
+    terminal.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.5)";
     terminal.style.overflow = "hidden";
     terminal.style.display = "flex";
     terminal.style.flexDirection = "column";
-    terminal.style.padding = "0";
     terminal.style.zIndex = "9999";
+    terminal.style.resize = "vertical";
+    terminal.style.transition = "height 0.3s ease, opacity 0.3s ease"; // Added animation transition
     document.body.appendChild(terminal);
 
     // Add a title bar
@@ -22,31 +26,71 @@
     titleBar.textContent = "JS Terminal";
     titleBar.style.backgroundColor = "#333";
     titleBar.style.color = "#fff";
-    titleBar.style.padding = "5px 10px";
+    titleBar.style.padding = "10px";
+    titleBar.style.borderTopLeftRadius = "10px";
+    titleBar.style.borderTopRightRadius = "10px";
     titleBar.style.fontWeight = "bold";
+    titleBar.style.display = "flex";
+    titleBar.style.justifyContent = "space-between";
+    titleBar.style.alignItems = "center";
     terminal.appendChild(titleBar);
+
+    // Add a minimize button
+    const minimizeButton = document.createElement("button");
+    minimizeButton.textContent = "▾"; // Down arrow
+    minimizeButton.style.backgroundColor = "#50c7c7";
+    minimizeButton.style.color = "#fff";
+    minimizeButton.style.border = "none";
+    minimizeButton.style.borderRadius = "50%";
+    minimizeButton.style.width = "25px";
+    minimizeButton.style.height = "25px";
+    minimizeButton.style.cursor = "pointer";
+    minimizeButton.style.fontSize = "14px";
+    minimizeButton.style.display = "flex";
+    minimizeButton.style.justifyContent = "center";
+    minimizeButton.style.alignItems = "center";
+    minimizeButton.style.marginRight = "5px";
+    titleBar.appendChild(minimizeButton);
+
+    // Add a close button
+    const closeButton = document.createElement("button");
+    closeButton.textContent = "✖";
+    closeButton.style.backgroundColor = "#ff4d4d";
+    closeButton.style.color = "#fff";
+    closeButton.style.border = "none";
+    closeButton.style.borderRadius = "50%";
+    closeButton.style.width = "25px";
+    closeButton.style.height = "25px";
+    closeButton.style.cursor = "pointer";
+    closeButton.style.fontSize = "14px";
+    closeButton.style.display = "flex";
+    closeButton.style.justifyContent = "center";
+    closeButton.style.alignItems = "center";
+    titleBar.appendChild(closeButton);
 
     // Add a log area for output
     const logArea = document.createElement("div");
     logArea.style.flexGrow = "1";
     logArea.style.overflowY = "auto";
     logArea.style.padding = "10px";
+    logArea.style.color = "#c8ffc8";
+    logArea.style.fontSize = "13px";
     terminal.appendChild(logArea);
 
-    // Create a container for the input with a ">" for style
+    // Create a container for the input
     const inputContainer = document.createElement("div");
     inputContainer.style.display = "flex";
     inputContainer.style.alignItems = "center";
-    inputContainer.style.backgroundColor = "#000";
-    inputContainer.style.color = "#00ff00";
     inputContainer.style.padding = "10px";
+    inputContainer.style.backgroundColor = "#2a2a3e";
     terminal.appendChild(inputContainer);
 
     // Add ">" for terminal style
     const inputPrompt = document.createElement("span");
     inputPrompt.textContent = ">";
     inputPrompt.style.marginRight = "10px";
-    inputPrompt.style.fontFamily = "monospace";
+    inputPrompt.style.color = "#00ff00";
+    inputPrompt.style.fontWeight = "bold";
     inputContainer.appendChild(inputPrompt);
 
     // Create an input for commands
@@ -57,26 +101,33 @@
     commandInput.style.color = "#00ff00";
     commandInput.style.border = "none";
     commandInput.style.outline = "none";
-    commandInput.style.fontFamily = "monospace";
+    commandInput.style.fontFamily = "Consolas, Monaco, monospace";
     commandInput.style.fontSize = "14px";
+    commandInput.style.padding = "5px";
     inputContainer.appendChild(commandInput);
 
-    // Add a close button
-    const closeButton = document.createElement("button");
-    closeButton.textContent = "Close";
-    closeButton.style.position = "absolute";
-    closeButton.style.top = "5px";
-    closeButton.style.right = "10px";
-    closeButton.style.backgroundColor = "#ff4d4d";
-    closeButton.style.color = "#ffffff";
-    closeButton.style.border = "none";
-    closeButton.style.padding = "5px 10px";
-    closeButton.style.cursor = "pointer";
-    closeButton.style.fontSize = "12px";
-    closeButton.addEventListener("click", () => {
-        terminal.remove();
+    // Handle minimize button functionality
+    let isMinimized = false;
+    minimizeButton.addEventListener("click", () => {
+        if (isMinimized) {
+            terminal.style.height = "300px";
+            terminal.style.opacity = "1";  // Restore opacity
+            logArea.style.display = "block";  // Show the log area
+            inputContainer.style.display = "flex";  // Show the input area
+            minimizeButton.textContent = "▾"; // Down arrow
+        } else {
+            terminal.style.height = "50px"; // Minimize the terminal
+            terminal.style.opacity = "1";  // Keep opacity full to show only the title bar
+            logArea.style.display = "none";  // Hide the log area
+            inputContainer.style.display = "none";  // Hide the input area
+            minimizeButton.textContent = "▴"; // Up arrow
+        }
+        isMinimized = !isMinimized;
     });
-    terminal.appendChild(closeButton);
+
+    // Handle close button functionality
+    closeButton.addEventListener("click", () => terminal.remove());
+
 
     // Global variables for sendPing
     let pingInterval;
