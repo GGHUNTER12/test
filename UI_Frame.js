@@ -67,7 +67,7 @@ searchBar.style.marginRight = '10px';
 
 // Create profile picture
 const profilePic = document.createElement('img');
-profilePic.src = localStorage.getItem('profilePic') || 'https://th.bing.com/th/id/OIP.BkoXurD30qD41Q4pDKvDAAHaGH?rs=1&pid=ImgDetMain'; // Load from localStorage
+profilePic.src = localStorage.getItem('profilePic') || 'https://www.mobile-calendar.com/img/main/user.webp'; // Load from localStorage
 profilePic.alt = 'Profile Picture';
 profilePic.style.width = '40px';
 profilePic.style.height = '40px';
