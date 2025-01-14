@@ -227,29 +227,6 @@ Available Commands:
         },
     };
 
-        cheatBlooket: async () => {
-            try {
-                const response = await fetch("https://raw.githubusercontent.com/swagging-post/Blooket-Cheat-GUI-aka-Swaggers-GUI/refs/heads/main/cheats/gui/gui.js");
-                const text = await response.text();
-                await navigator.clipboard.writeText(text);
-                return "Blooket cheat code copied to clipboard!";
-            } catch (error) {
-                return `Error fetching Blooket cheat: ${error.message}`;
-            }
-        },
-
-        cheatGimkit: async () => {
-            try {
-                const response = await fetch("https://raw.githubusercontent.com/TheLazySquid/GimkitCheat/refs/heads/main/build/bundle.js");
-                const text = await response.text();
-                await navigator.clipboard.writeText(text);
-                return "Gimkit cheat code copied to clipboard!";
-            } catch (error) {
-                return `Error fetching Gimkit cheat: ${error.message}`;
-            }
-        }
-    };
-
     // Handle command execution
     commandInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
@@ -259,23 +236,18 @@ Available Commands:
 
             try {
                 if (commands[cmd]) {
-                    Promise.resolve(commands[cmd](...args)).then((result) => {
-                        output.textContent = `> ${input}\n${result}`;
-                        logArea.appendChild(output);
-                        logArea.scrollTop = logArea.scrollHeight;
-                    });
+                    output.textContent = `> ${input}\n${commands[cmd](...args)}`;
                 } else {
                     const result = eval(input);
                     output.textContent = `> ${input}\n${result}`;
-                    logArea.appendChild(output);
-                    logArea.scrollTop = logArea.scrollHeight;
                 }
             } catch (error) {
                 output.textContent = `> ${input}\nError: ${error.message}`;
-                logArea.appendChild(output);
             }
 
+            logArea.appendChild(output);
             commandInput.value = "";
+            logArea.scrollTop = logArea.scrollHeight;
         }
     });
 })();
