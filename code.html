@@ -1,10 +1,46 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>code sh!t</title>
+    <title>Secured | code sh!t</title>
     <style>
+            /* Top menu styles */
+        .top-menu {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center the menu items */
+            width: 100%;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            z-index: 2;
+        }
+        .top-menu img {
+            width: 70px;  /* Increased size for logo */
+            height: auto;
+            margin-right: 20px;
+        }
+        .top-menu a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            padding: 10px 20px;
+            border: 2px solid white;
+            border-radius: 10px;
+            background: transparent;
+            transition: all 0.3s ease;
+            margin: 0 10px; /* Space between buttons */
+        }
+        .top-menu a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px purple, 0 0 30px pink;
+        }
+        
         /* Basic page setup */
         * {
             margin: 0;
@@ -122,6 +158,14 @@
         <!-- Note in the corner -->
         <div class="note">ditched the password too complicated</div>
     </div>
+
+<div class="top-menu">
+    <img src="https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/462567906_1264779828100561_3681124885906587443_n.png?_nc_cat=105&ccb=1-7&_nc_sid=9f807c&_nc_ohc=ES7HFoTaqykQ7kNvgEFQ6Az&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&oh=03_Q7cD1gFvDVrfXafXZD60sVEZHwJovzCfnLPuVVNAfAaA3TEadQ&oe=67AFD52B" alt="Secured Logo" style="width: 70px; height: auto; margin-right: 20px;">
+    <a href="index.html">Home</a>
+    <a href="https://gghunter12.github.io/test/code.html" target="_blank">Codes</a>
+</div>
+
+
 
     <script>
         // Particle effect generation
