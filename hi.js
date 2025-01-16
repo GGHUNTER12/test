@@ -8,7 +8,7 @@
     terminal.style.height = "300px";
     terminal.style.background = "linear-gradient(135deg, #1e1e2f, #2a2a3e)";
     terminal.style.color = "#00ff00";
-    terminal.style.fontFamily = "Consolas, Monaco, monospace";
+    terminal.style.fontFamily = "Google Sans, Arial, sans-serif";
     terminal.style.fontSize = "14px";
     terminal.style.borderTopLeftRadius = "10px";
     terminal.style.borderTopRightRadius = "10px";
@@ -89,7 +89,7 @@
     const inputPrompt = document.createElement("span");
     inputPrompt.textContent = ">";
     inputPrompt.style.marginRight = "10px";
-    inputPrompt.style.color = "#00ff00";
+    inputPrompt.style.color = "#2beded";
     inputPrompt.style.fontWeight = "bold";
     inputContainer.appendChild(inputPrompt);
 
@@ -98,10 +98,10 @@
     commandInput.type = "text";
     commandInput.style.flexGrow = "1";
     commandInput.style.backgroundColor = "transparent";
-    commandInput.style.color = "#00ff00";
+    commandInput.style.color = "#2beded";
     commandInput.style.border = "none";
     commandInput.style.outline = "none";
-    commandInput.style.fontFamily = "Consolas, Monaco, monospace";
+    commandInput.style.fontFamily = "Google Sans, Arial, sans-serif";
     commandInput.style.fontSize = "14px";
     commandInput.style.padding = "5px";
     inputContainer.appendChild(commandInput);
@@ -125,6 +125,13 @@
         isMinimized = !isMinimized;
     });
 
+    // Dynamically load Google Sans font
+const fontLink = document.createElement("link");
+fontLink.href = "https://fonts.googleapis.com/css2?family=Google+Sans&display=swap";
+fontLink.rel = "stylesheet";
+document.head.appendChild(fontLink);
+
+    
     // Handle close button functionality
     closeButton.addEventListener("click", () => terminal.remove());
 
