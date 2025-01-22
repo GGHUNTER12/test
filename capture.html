@@ -131,7 +131,7 @@
     <div id="content">
       <div id="box">
         <h1>Weather Test & Page Capture 🌤</h1>
-        <button id="button" class="capture-btn">Capture Page</button>
+        <button id="captureBtn" class="capture-btn">Capture Page</button>
         <button onclick="reloadPage()">Reload Page</button>
         <p id="status">Status: waiting for action to get ready...</p>
       </div>
@@ -140,15 +140,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
       async function reloadPage() {
-        location.reload(); // Reload the current tab
+        location.reload();
       }
-      const captureBtn = document.getElementById('captureBtn');
-      const status = document.getElementById('status');
-      const versionElement = document.getElementById('version');
-      const loader = document.getElementById('loader');
-      const content = document.getElementById('content');
+      
+      const captureBtn = document.getElementById("captureBtn");
+      const status = document.getElementById("status");
+      const versionElement = document.getElementById("version");
+      const loader = document.getElementById("loader");
+      const content = document.getElementById("content");
       const currentVersion = "2.7.2 | captures are safe, made by gghunter";
       versionElement.innerText = `Version: ${currentVersion}`;
+      
       (async function() {
         try {
           await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate loading
