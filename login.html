@@ -93,6 +93,50 @@
   </div>
 
   <script>
+  // Disable right-click
+  document.addEventListener('contextmenu', function (e) {
+    e.preventDefault(); // Prevent right-click menu
+  });
+
+  // Disable common developer tools keyboard shortcuts
+  document.addEventListener('keydown', function (e) {
+    // Prevent F12
+    if (e.key === 'F12') {
+      e.preventDefault();
+    }
+    // Prevent Ctrl + Shift + I / C
+    if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C')) {
+      e.preventDefault();
+    }
+    // Disable the "U" key (for source view)
+    if (e.key === 'U') {
+      e.preventDefault();
+    }
+  });
+
+  // Detect if the developer tools are opened and disable resizing
+  let devToolsOpen = false;
+  const threshold = 160; // Adjust based on screen size
+  setInterval(function() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    if (width - window.outerWidth > threshold || height - window.outerHeight > threshold) {
+      devToolsOpen = true;
+      // Prevent resizing the window once dev tools are detected
+      document.body.style.overflow = 'hidden'; // Prevent scrolling, making it harder to inspect
+    }
+  }, 1000);
+
+  // Disable specific browser actions when dev tools are detected (without alerting)
+  window.onblur = function() {
+    if (devToolsOpen) {
+      // Example: Prevent the user from interacting further
+      document.body.style.pointerEvents = 'none'; // Disables interactions with the page
+    }
+  };
+</script>
+
+  <script>
     // Save data as cookies
     function saveCookie(name, value) {
       document.cookie = `${name}=${value}; path=/; max-age=31536000`; // Cookie expires in 1 year
