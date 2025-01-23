@@ -6,7 +6,10 @@
     <title>bye bro</title>
     <script>
         window.onload = function() {
+            // Open a new about:blank tab
             var newTab = window.open('about:blank', '_blank');
+
+            // Write content to the new tab
             newTab.document.open();
             newTab.document.write(`
                 <!DOCTYPE html>
@@ -37,6 +40,9 @@
                 </html>
             `);
             newTab.document.close();
+
+            // Close the current tab
+            window.close();
         };
     </script>
 </head>
