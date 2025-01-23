@@ -3,27 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden; /* Disables scrolling */
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            overflow: hidden; /* Disables scrolling within the iframe */
-        }
-    </style>
+    <title>bye bro</title>
     <script>
         window.onload = function() {
-            var iframe = document.createElement('iframe');
-            iframe.src = 'https://gghunter12.github.io/test/login.html';
-            document.body.appendChild(iframe);
+            var newTab = window.open('about:blank', '_blank');
+            newTab.document.open();
+            newTab.document.write(`
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Secured Web Login</title>
+                    <style>
+                        body, html {
+                            margin: 0;
+                            padding: 0;
+                            height: 100%;
+                            width: 100%;
+                            overflow: hidden; /* Disables scrolling */
+                        }
+                        iframe {
+                            width: 100%;
+                            height: 100%;
+                            border: none;
+                            overflow: hidden; /* Disables scrolling within the iframe */
+                        }
+                    </style>
+                </head>
+                <body>
+                    <iframe src="https://gghunter12.github.io/test/login.html"></iframe>
+                </body>
+                </html>
+            `);
+            newTab.document.close();
         };
     </script>
 </head>
