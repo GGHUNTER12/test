@@ -13,8 +13,20 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      background: transparent;
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
       overflow: hidden;
+      position: relative;
+    }
+
+    .logo-container {
+      position: absolute;
+      top: 25%; /* Position logo container at 25% from the top */
+      text-align: center;
+      width: 100%;
+    }
+
+    .logo-container img {
+      width: 400px; /* Bigger size for the logo */
     }
 
     .container {
@@ -26,6 +38,8 @@
       animation: glow 2s infinite alternate;
       text-align: center;
       width: 300px;
+      position: relative;
+      top: 60px; /* Adds space between the logo and box */
     }
 
     button {
@@ -69,6 +83,11 @@
   </style>
 </head>
 <body>
+
+  <!-- Secured Logo -->
+  <div class="logo-container">
+    <img src="https://scontent.fsac1-2.fna.fbcdn.net/v/t1.15752-9/473097128_1620690828531662_2847395445130549948_n.png?_nc_cat=110&ccb=1-7&_nc_sid=9f807c&_nc_ohc=aZ0ijPu4j50Q7kNvgHdxA4V&_nc_zt=23&_nc_ht=scontent.fsac1-2.fna&oh=03_Q7cD1gGnnZs6NZusJsqFcb31uozZWEwU2-p50KPADJ3x-yHzxw&oe=67BA5492" alt="Secured Logo">
+  </div>
 
   <!-- Sign Up Section -->
   <div class="container" id="signup-section">
