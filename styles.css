@@ -1,28 +1,98 @@
 body {
-    font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
+    min-height: 100vh;
     margin: 0;
+    background: transparent;
 }
 
-.time-date-container {
-    text-align: center;
-    background-color: #333;
+.iframe-container {
+    position: relative;
+    width: 1000px;
+    height: 550px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px 5px rgba(128, 0, 128, 0.7), 0 0 30px 10px rgba(128, 0, 128, 0.5);
+    overflow: hidden;
+    animation: glow 2s infinite alternate;
+}
+
+iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    position: absolute;
+    z-index: 1;
+}
+
+.loading-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background: url('https://lh4.googleusercontent.com/YS17qEsnXjgsf4WMCPo06WYkqMhiMDFE8qBDwMDXRkE00UOMi2j1RGgGACkg2veqUoBmd4VzBaFhZ-KS1q5D4yQ=w16383') no-repeat center center / cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-logo {
+    width: 300px;
+    height: auto;
+    margin-bottom: 30px;
+}
+
+.loading-circle {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    border-top: 6px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.fullscreen-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: purple;
     color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px rgba(128, 0, 128, 0.7);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.time {
-    font-size: 2rem;
-    font-weight: bold;
+.fullscreen-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(128, 0, 128, 1);
 }
 
-.date {
-    font-size: 1.2rem;
-    margin-top: 10px;
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 10px 3px rgba(128, 0, 128, 0.5), 0 0 20px 8px rgba(128, 0, 128, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 25px 10px rgba(128, 0, 128, 1), 0 0 40px 15px rgba(128, 0, 128, 0.8);
+    }
 }
