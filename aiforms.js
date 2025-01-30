@@ -3,7 +3,7 @@
 
     console.log("🔍 Scanning Google Form...");
 
-    const HF_API_KEY = "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";
+    const HF_API_KEY = "huggingapikeyhere";
 
     async function generateAIAnswer(question) {
         try {
