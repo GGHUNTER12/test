@@ -21,7 +21,7 @@ hi, bro imagine keep checking like everyday if i updated it, now thats crazy.
 </head>
 <body>
     <div class="curved-gif">
-        <img src="https://media1.tenor.com/m/pA78COWi2lIAAAAd/fort-fortnite.gif" alt="Curved GIF">
+        <img src="https://c.tenor.com/pA78COWi2lIAAAAd/tenor.gif" alt="Curved GIF">
     </div>
 
 </body>
