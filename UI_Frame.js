@@ -106,6 +106,43 @@ profileMenu.appendChild(menuItem2);
 profileMenu.appendChild(menuItem3);
 document.body.appendChild(profileMenu);
 
+// Create fullscreen button
+const fullscreenButton = document.createElement('button');
+fullscreenButton.innerHTML = '⛶'; // You can use an icon or emoji
+fullscreenButton.style.position = 'absolute';
+fullscreenButton.style.bottom = '10px';
+fullscreenButton.style.right = '10px';
+fullscreenButton.style.width = '40px';
+fullscreenButton.style.height = '40px';
+fullscreenButton.style.borderRadius = '50%';
+fullscreenButton.style.backgroundColor = '#557bed';
+fullscreenButton.style.color = 'white';
+fullscreenButton.style.border = 'none';
+fullscreenButton.style.cursor = 'pointer';
+fullscreenButton.style.fontSize = '18px';
+fullscreenButton.style.display = 'flex';
+fullscreenButton.style.alignItems = 'center';
+fullscreenButton.style.justifyContent = 'center';
+fullscreenButton.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.3)';
+fullscreenButton.style.zIndex = '9999';
+
+// Add fullscreen button to the panel
+panel.appendChild(fullscreenButton);
+
+// Fullscreen toggle functionality
+fullscreenButton.addEventListener('click', () => {
+  if (iframe.requestFullscreen) {
+    iframe.requestFullscreen();
+  } else if (iframe.mozRequestFullScreen) { // Firefox
+    iframe.mozRequestFullScreen();
+  } else if (iframe.webkitRequestFullscreen) { // Chrome, Safari and Opera
+    iframe.webkitRequestFullscreen();
+  } else if (iframe.msRequestFullscreen) { // IE/Edge
+    iframe.msRequestFullscreen();
+  }
+});
+
+
 // Load the history of URLs from localStorage
 let urlHistory = JSON.parse(localStorage.getItem('urlHistory')) || [];
 
