@@ -173,7 +173,7 @@ reloadButton.addEventListener('mouseout', () => {
 
 // Create iframe for displaying content
 const iframe = document.createElement('iframe');
-iframe.src = 'https://gooogleserver-as3.macgyver.cf/';
+iframe.src = 'https://secured-web-szvy.webs.vc/szvy/szvy/aHR0cHM6Ly9uZ2cuZnJvZ2llZS5vbmUv';
 iframe.style.width = '100%';
 iframe.style.height = 'calc(100% - 100px)';
 iframe.style.borderRadius = '15px';
@@ -183,7 +183,7 @@ iframe.allowFullscreen = true;
 
 // Create text label below the video
 const textLabel = document.createElement('div');
-textLabel.innerText = 'peekaboo 😮‍💨😶‍🌫️';
+textLabel.innerText = 'peekaboo 😮‍💨😶‍🌫️ - anonymous';
 textLabel.style.color = 'white';
 textLabel.style.marginTop = '5px';
 textLabel.style.textAlign = 'center';
