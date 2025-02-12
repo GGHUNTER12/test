@@ -10,10 +10,16 @@ panel.style.border = '5px solid black';
 panel.style.zIndex = '2147483646';
 panel.style.resize = 'both';
 panel.style.overflow = 'auto';
-panel.style.padding = '5px';
+panel.style.padding = '3px';
 panel.style.boxSizing = 'border-box';
-panel.style.borderRadius = '15px';
+panel.style.borderRadius = '25px';
 panel.style.fontFamily = 'Google Sans, Arial, sans-serif';
+
+let link = document.createElement("link");
+link.href = "https://fonts.googleapis.com/css2?family=Google+Sans&display=swap";
+link.rel = "stylesheet";
+document.head.appendChild(link);
+
 
 // Create close button
 const closeButton = document.createElement('button');
@@ -22,11 +28,12 @@ closeButton.style.cursor = 'pointer';
 closeButton.style.backgroundColor = '#FF5733';
 closeButton.style.color = 'white';
 closeButton.style.border = 'none';
-closeButton.style.borderRadius = '10px';
+closeButton.style.borderRadius = '15px';
 closeButton.style.padding = '5px 10px';
 closeButton.style.fontSize = '14px';
 closeButton.style.transition = 'background-color 0.3s';
 closeButton.style.marginRight = '10px';
+closeButton.style.fontFamily = "'Google Sans', sans-serif";
 
 // Create drag handle
 const dragHandle = document.createElement('button');
@@ -35,11 +42,12 @@ dragHandle.style.cursor = 'grab';
 dragHandle.style.backgroundColor = '#FFC300';
 dragHandle.style.color = 'black';
 dragHandle.style.border = 'none';
-dragHandle.style.borderRadius = '10px';
+dragHandle.style.borderRadius = '15px';
 dragHandle.style.padding = '5px 15px';
 dragHandle.style.fontSize = '14px';
 dragHandle.style.transition = 'background-color 0.3s';
 dragHandle.style.marginRight = '10px';
+dragHandle.style.fontFamily = "'Google Sans', sans-serif";
 
 // Create reload button
 const reloadButton = document.createElement('button');
@@ -48,11 +56,12 @@ reloadButton.style.cursor = 'pointer';
 reloadButton.style.backgroundColor = '#4169e1';
 reloadButton.style.color = 'white';
 reloadButton.style.border = 'none';
-reloadButton.style.borderRadius = '10px';
+reloadButton.style.borderRadius = '15px';
 reloadButton.style.padding = '5px 10px';
 reloadButton.style.fontSize = '14px';
 reloadButton.style.transition = 'background-color 0.3s';
 reloadButton.style.marginRight = '10px';
+reloadButton.style.fontFamily = "'Google Sans', sans-serif";
 
 // Create search bar
 const searchBar = document.createElement('input');
@@ -64,6 +73,7 @@ searchBar.style.padding = '5px';
 searchBar.style.fontFamily = 'Google Sans, Arial, sans-serif';
 searchBar.style.flexGrow = '1';
 searchBar.style.marginRight = '10px';
+searchBar.style.fontFamily = "'Google Sans', sans-serif";
 
 // Create profile picture
 const profilePic = document.createElement('img');
@@ -142,7 +152,6 @@ fullscreenButton.addEventListener('click', () => {
   }
 });
 
-
 // Load the history of URLs from localStorage
 let urlHistory = JSON.parse(localStorage.getItem('urlHistory')) || [];
 
@@ -203,14 +212,14 @@ const iframe = document.createElement('iframe');
 iframe.src = 'https://gooogleserver-as3.macgyver.cf/';
 iframe.style.width = '100%';
 iframe.style.height = 'calc(100% - 100px)';
-iframe.style.borderRadius = '10px';
+iframe.style.borderRadius = '15px';
 iframe.frameBorder = '0';
 iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
 iframe.allowFullscreen = true;
 
 // Create text label below the video
 const textLabel = document.createElement('div');
-textLabel.innerText = 'made by your fav coder (snoopy)💯💯 and with AI help';
+textLabel.innerText = 'peekaboo 😮‍💨😶‍🌫️';
 textLabel.style.color = 'white';
 textLabel.style.marginTop = '5px';
 textLabel.style.textAlign = 'center';
