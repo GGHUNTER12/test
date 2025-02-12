@@ -173,7 +173,7 @@ reloadButton.addEventListener('mouseout', () => {
 
 // Create iframe for displaying content
 const iframe = document.createElement('iframe');
-iframe.src = 'https://secured-web-szvy.webs.vc/szvy/szvy/aHR0cHM6Ly9uZ2cuZnJvZ2llZS5vbmUv';
+iframe.src = 'https://secured-web-szvy.webs.vc';
 iframe.style.width = '100%';
 iframe.style.height = 'calc(100% - 100px)';
 iframe.style.borderRadius = '15px';
