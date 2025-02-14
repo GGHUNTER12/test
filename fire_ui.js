@@ -16,7 +16,7 @@
         top: "0", left: "0",
         width: "100vw", height: "100vh",
         border: "none", display: "none",
-        zIndex: "9999",
+        zIndex: "-1",  // Set the iframe to the smallest z-index so it doesn't show over other elements
         transition: "opacity 0.3s ease-in-out"
     });
     iframe.src = "https://secured-web-szvy.webs.vc";
@@ -184,9 +184,9 @@
 
     iframe.onload = () => updateTabDisplay(iframe.src);
 
-alert("what up bro");
-alert("yea listen get closer buddy");
-alert("press / to show the ui and press s and g to show the iframe in fullscreen");
-alert("now i will let you get back to it");
+    alert("what up bro");
+    alert("yea listen get closer buddy");
+    alert("press / to show the ui and press s and g to show the iframe in fullscreen");
+    alert("now i will let you get back to it");
 
 })();
